@@ -1,0 +1,10 @@
+.git
+.gitignore
+.vscode
+.idea
+node_modules
+dist
+.eslintrc.json
+.editort
+CONTRIBUTING.md
+README.md
