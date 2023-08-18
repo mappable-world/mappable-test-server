@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "ES2018",
+        "module": "Node16",
+        "moduleResolution": "node16",
+        "resolveJsonModule": true,
+        "strict": true,
+        "outDir": "./dist",
+        "rootDir": "./",
+        "baseUrl": "./",
+        "esModuleInterop": true
+    },
+    "include": ["src/**/*", "src/**/*.json"]
+}
