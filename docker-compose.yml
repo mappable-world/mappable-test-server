@@ -24,3 +24,15 @@ services:
     ports:
       - '5432:5432'
     restart: always
+
+  pgadmin:
+    container_name: pgadmin
+    depends_on:
+      - db
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: chupurnov@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: qwertyuiop
+    ports:
+      - '8999:80'
+    restart: always
