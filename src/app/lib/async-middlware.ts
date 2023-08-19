@@ -1,4 +1,3 @@
-
 import {Request, Response, RequestHandler} from 'express';
 
 type AsyncRequestHandler = (req: Request, res: Response) => Promise<void>;
