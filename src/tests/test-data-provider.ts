@@ -6,6 +6,7 @@ import * as path from 'path';
 export class TestDataProvider implements DataProvider {
     #data: Feature[] = [];
     #isLoading: Promise<void>;
+
     constructor() {
         this.#isLoading = this.__loadData();
     }
