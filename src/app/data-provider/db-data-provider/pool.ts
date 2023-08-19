@@ -21,7 +21,9 @@ export class DB {
         return this.#instance;
     }
 
-    query(sql: string): Promise<QueryResult> {
-        return this.#pool.query(sql);
+    query(sql: string, values: unknown[]): Promise<QueryResult>;
+    query(sql: string): Promise<QueryResult>;
+    query(sql: string, values?: unknown[]): Promise<QueryResult> {
+        return this.#pool.query(sql, values);
     }
 }
