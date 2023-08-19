@@ -2,6 +2,6 @@
     "verbose": true,
     "ignore": [".git", "node_modules", "dist"],
     "watch": ["src"],
-    "exec": "make dev",
+    "exec": "npm run dev",
     "ext": "ts"
 }
