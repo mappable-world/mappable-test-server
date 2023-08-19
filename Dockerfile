@@ -5,7 +5,7 @@ WORKDIR /opt/server
 COPY . .
 
 RUN npm ci
-RUN ./node_modules/.bin/tsc -b tsconfig.json
+RUN npm run build
 
 CMD ["pm2-runtime", "--instances", "max", "dist/index.js"]
 
