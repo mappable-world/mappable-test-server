@@ -1,6 +1,7 @@
 import * as nock from 'nock';
 import {TestServer} from '../test-server';
-import {app} from '../../app/app';
+import {createApp} from '../../app/app';
+import {Feature} from "../../app/lib/geo";
 
 describe('/v2', () => {
     let testServer: TestServer;
@@ -9,7 +10,16 @@ describe('/v2', () => {
         nock.disableNetConnect();
         nock.enableNetConnect(/(127.0.0.1|localhost)/);
 
-        testServer = await TestServer.start(app);
+        testServer = await TestServer.start(
+            createApp({
+                getFeaturesByBBox(): Promise<Feature[]> {
+                    return Promise.resolve([]);
+                },
+                isReady(): Promise<void> {
+                    return Promise.resolve();
+                }
+            })
+        );
     });
 
     afterAll(async () => {
