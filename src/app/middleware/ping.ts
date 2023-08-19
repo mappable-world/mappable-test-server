@@ -3,7 +3,7 @@ import {DataProvider} from '../data-provider/interface';
 
 export const pingMiddleware = async (provider: DataProvider, _: Request, res: Response) => {
     try {
-        await provider.checkConnection();
+        await provider.isReady();
     } catch (error: unknown) {
         res.status(500).send({ok: false});
         return;

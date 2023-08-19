@@ -18,7 +18,8 @@ export const app = express()
     .use((req: express.Request, res: express.Response, next: express.NextFunction) =>
         next(Boom.notFound('Endpoint not found'))
     )
-    .use((err: Error, req: express.Request, res: express.Response) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .use((err: Error, req: express.Request, res: express.Response, next: unknown) => {
         if (Boom.isBoom(err)) {
             sendError(res, err);
         } else {

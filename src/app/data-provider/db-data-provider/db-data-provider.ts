@@ -13,7 +13,7 @@ export class DbDataProvider implements DataProvider {
         return points.rows as Feature[];
     }
 
-    async checkConnection(): Promise<void> {
+    async isReady(): Promise<void> {
         try {
             await DB.getInstance().query('select now()');
         } catch(error: unknown) {
