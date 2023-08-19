@@ -54,7 +54,7 @@ describe('/v2', () => {
                 expect(result.features.length).toEqual(100);
             });
 
-            describe('Incorrect bbox', () => {
+            describe('Incorrect bbox request', () => {
                 it('should return error', async () => {
                     const res = await testServer.request('/v1/bbox', {
                         method: 'post',
@@ -85,7 +85,7 @@ describe('/v2', () => {
                 expect(result.features.length).toEqual(21);
             });
 
-            describe('Incorrect tile', () => {
+            describe('Incorrect tile request', () => {
                 it('should return error', async () => {
                     const res = await testServer.request('/v1/bbox', {
                         method: 'post',
