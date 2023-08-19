@@ -11,28 +11,16 @@ COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
 SET default_tablespace = '';
 SET default_table_access_method = heap;
 
+DROP TABLE IF EXISTS public.points;
 CREATE TABLE public.points (
     uid uuid DEFAULT public.gen_random_uuid() NOT NULL,
     coordinates point NOT NULL,
-    title "char"[]
+    json "json"
 );
 
 
 ALTER TABLE public.points OWNER TO postgres;
 
-
-INSERT INTO public.points (coordinates, title) VALUES
-	('(1,1)', NULL),
-	('(2,2)', NULL),
-	('(3,3)', NULL);
-
 ALTER TABLE ONLY public.points
     ADD CONSTRAINT points_pkey PRIMARY KEY (uid);
-
-CREATE INDEX "Coordinates" ON public.points USING hash (title);
-
-
-GRANT ALL ON DATABASE api TO api;
-
-
 

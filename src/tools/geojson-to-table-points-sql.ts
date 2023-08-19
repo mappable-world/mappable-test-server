@@ -1,6 +1,9 @@
+import type {Feature} from '../app/lib/geo';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';
+
+// ts-node ./src/tools/geojson-to-table-points-sql.ts compose/data/ne_10m_admin_1_label_points.geojson compose/data/dump/points.sql
 
 const file = path.resolve(process.cwd(), process.argv[2]);
 const output = path.resolve(process.cwd(), process.argv[3]);
@@ -13,27 +16,15 @@ if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
 const content = fs.readFileSync(file, 'utf-8');
 const data = JSON.parse(content);
 
-type Feature = {
-    type: 'Feature';
-    properties: {
-        OBJECTID_1: number;
-        diss_me: number;
-        adm1_code: string;
-        sr_sov_a3: string;
-        sr_adm0_a3: string;
-        sr_gu_a3: string;
-        iso_a2: string;
-        adm0_sr: number;
-        name: string;
-        admin: string;
-        scalerank: number;
-        datarank: number;
-        featureclass: string;
-    };
-    geometry: {type: 'Point'; coordinates: [number, number]};
-};
+const inserts: string[] = [];
+while (data.features.length) {
+    const points = data.features.splice(0, 1000);
+    const sql = `INSERT INTO public.points (coordinates, json) VALUES
+${points
+    .map((f: Feature) => `\t('(${f.geometry.coordinates})', '${JSON.stringify(f).replace(/'/g, "''")}')`)
+    .join(',\n')};`;
 
-const sql = `INSERT INTO public.points (coordinates, title) VALUES
-${data.features.map((f: Feature) => `\t('(${f.geometry.coordinates})', NULL)`).join(',\n')};`;
+    inserts.push(sql);
+}
 
-fs.writeFileSync(output, sql);
+fs.writeFileSync(output, '\\connect api\n' + inserts.join('\n\n'));
