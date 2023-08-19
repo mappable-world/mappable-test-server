@@ -3,15 +3,15 @@ import {DataProvider} from '../data-provider/interface';
 import {z} from 'zod';
 import * as Boom from '@hapi/boom';
 import {formatZodError} from '../lib/zod-error';
-import {Bounds, LngLat} from '../lib/geo';
+import {Bounds} from '../lib/geo';
 import {fromWorldCoordinates} from '../lib/projection/projection';
 
 const createTileRequestSchema = z.object({
     body: z
         .object({
-            x: z.number(),
-            y: z.number(),
-            z: z.number()
+            x: z.number().min(0),
+            y: z.number().min(0),
+            z: z.number().min(0),
         })
         .strict()
 });
@@ -33,5 +33,5 @@ export async function loadByTile(provider: DataProvider, req: Request, res: Resp
     const coordinates: Bounds = [fromWorldCoordinates({x, y}), fromWorldCoordinates({x: x + ts, y: y - ts})];
     const features = await provider.getFeaturesByBBox(coordinates, 100);
 
-    res.send({features, coordinates, ff: {x, y, tx, ty, tz, ntiles}});
+    res.send({features, bounds: coordinates});
 }
