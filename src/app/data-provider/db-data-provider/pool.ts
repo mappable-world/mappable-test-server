@@ -1,4 +1,6 @@
 import {Pool, QueryResult} from 'pg';
+import {logger} from '../../lib/logger';
+import {stringifyError} from '../../lib/error-handler';
 
 export class DB {
     #pool: Pool;
@@ -23,7 +25,12 @@ export class DB {
 
     query(sql: string, values: unknown[]): Promise<QueryResult>;
     query(sql: string): Promise<QueryResult>;
-    query(sql: string, values?: unknown[]): Promise<QueryResult> {
-        return this.#pool.query(sql, values);
+    async query(sql: string, values?: unknown[]): Promise<QueryResult> {
+        try {
+            return await this.#pool.query(sql, values);
+        } catch (e) {
+            logger.error(stringifyError(e as Error));
+            throw e;
+        }
     }
 }

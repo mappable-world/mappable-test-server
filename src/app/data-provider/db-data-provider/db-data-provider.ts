@@ -1,8 +1,6 @@
 import type {DataProvider} from '../interface';
 import {Bounds, Feature} from '../../lib/geo';
 import {DB} from './pool';
-import {logger} from "../../lib/logger";
-import {stringifyError} from "../../lib/error-handler";
 
 export class DbDataProvider implements DataProvider {
     async getFeaturesByBBox(bounds: Bounds, counts: number): Promise<Feature[]> {
@@ -14,11 +12,6 @@ export class DbDataProvider implements DataProvider {
     }
 
     async isReady(): Promise<void> {
-        try {
-            await DB.getInstance().query('select now()');
-        } catch(error: unknown) {
-            logger.error(stringifyError(error as Error));
-            return;
-        }
+        await DB.getInstance().query('select now()');
     }
 }

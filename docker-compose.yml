@@ -5,9 +5,6 @@ services:
       context: ./
     tty: true
     working_dir: /opt/server
-    volumes:
-      - ./app:/opt/server
-      - ./dist:/opt/static
     env_file:
       - .env
     ports:
