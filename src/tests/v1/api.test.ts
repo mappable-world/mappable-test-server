@@ -1,7 +1,7 @@
 import * as nock from 'nock';
 import {TestServer} from '../test-server';
 import {createApp} from '../../app/app';
-import {Feature} from '../../app/lib/geo';
+import {Bounds, Feature} from '../../app/lib/geo';
 import {DataProvider} from '../../app/data-provider/interface';
 import {TestDataProvider} from '../test-data-provider';
 
@@ -43,8 +43,8 @@ describe('/v2', () => {
                 const res = await testServer.request('/v1/bbox', {
                     method: 'post',
                     body: {
-                        "leftBottom": [-100, 100],
-                        "rightTop": [100, -100]
+                        leftBottom: [-100, 100],
+                        rightTop: [100, -100]
                     },
                     json: true
                 });
@@ -59,7 +59,7 @@ describe('/v2', () => {
                     const res = await testServer.request('/v1/bbox', {
                         method: 'post',
                         body: {
-                            "leftBottom": [-100, 100],
+                            leftBottom: [-100, 100]
                         },
                         json: true
                     });
@@ -73,16 +73,20 @@ describe('/v2', () => {
                 const res = await testServer.request('/v1/tile', {
                     method: 'post',
                     body: {
-                        "x": 10,
-                        "y": 11,
-                        "z": 5
+                        x: 10,
+                        y: 11,
+                        z: 5
                     },
                     json: true
                 });
                 expect(res.statusCode).toEqual(200);
 
-                const result = res.body as {features: Feature[]};
+                const result = res.body as {features: Feature[]; bounds: Bounds};
                 expect(result.features.length).toEqual(21);
+                expect(result.bounds).toEqual([
+                    [-67.5, 49.11291284486365],
+                    [-56.25, 41.17042723849767]
+                ]);
             });
 
             describe('Incorrect tile request', () => {
@@ -90,8 +94,8 @@ describe('/v2', () => {
                     const res = await testServer.request('/v1/bbox', {
                         method: 'post',
                         body: {
-                            "x": 10,
-                            "y": 11,
+                            x: 10,
+                            y: 11
                         },
                         json: true
                     });
