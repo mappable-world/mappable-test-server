@@ -1,0 +1,164 @@
+openapi: '3.0.1'
+info:
+    version: v1
+    title: Mappable test server
+    license:
+      name: "Apache-2"
+paths:
+    /ping:
+      get:
+        description: |
+          Handle for checking the readiness of the server to work
+        responses:
+          200:
+            description: Server is ready.
+            content:
+              application/json:
+                example: {"ok": true}
+                schema:
+                  type: object
+                  properties:
+                    ok:
+                      type: boolean
+          400:
+            description: Server is not ready.
+            content:
+              application/json:
+                example: { "ok": false }
+                schema:
+                  type: object
+                  properties:
+                    ok:
+                      type: boolean
+
+    /v1/bbox:
+        post:
+            description: |
+                Returns geo features whose coordinates are within the given rectangle bbox
+
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: ['leftBottom', 'rightTop']
+                            properties:
+                                leftBottom:
+                                    $ref: '#/components/schemas/LngLat'
+                                rightTop:
+                                    $ref: '#/components/schemas/LngLat'
+
+                description: JSON object
+            responses:
+                200:
+                    description: Features list.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    features:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Feature'
+                400:
+                    $ref: '#/components/responses/InvalidParameters'
+
+    /v1/tile:
+        post:
+            description: |
+                Returns geo features whose coordinates are within a rectangle that is uniquely defined by its x,y and z tile coordinates
+
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: ['x', 'y', 'z']
+                            properties:
+                                x:
+                                    type: integer
+                                y:
+                                    type: integer
+                                z:
+                                    type: integer
+
+                description: JSON object
+            responses:
+                200:
+                    description: Features list.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    bounds:
+                                        description: Computed rectangle of coordinates lower left and upper right corner for a given tile
+                                        items:
+                                            $ref: '#/components/schemas/LngLat'
+
+                                    features:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Feature'
+                400:
+                    $ref: '#/components/responses/InvalidParameters'
+
+components:
+    responses:
+        InvalidParameters:
+            description: Invalid parameters.
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+
+    schemas:
+        LngLat:
+            description: 'Array of coordinates [Longitude, Latitude].'
+            example: [24, 54]
+            type: array
+            items:
+                type: number
+            minItems: 2
+            maxItems: 2
+
+        Feature:
+            description: 'GeoJSON Feature'
+            type: object
+            example:
+                {
+                    type: 'Feature',
+                    properties: {name: 'Abu Dhabi'},
+                    geometry: {'type': 'Point', 'coordinates': [24.189215755000077, 53.796540969000034]}
+                }
+            properties:
+                type:
+                    type: string
+                properties:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                geometry:
+                    type: object
+                    properties:
+                        type:
+                            type: string
+                        coordinates:
+                            $ref: '#/components/schemas/LngLat'
+
+        Error:
+            type: object
+            properties:
+                statusCode:
+                    type: integer
+                error:
+                    type: string
+                message:
+                    type: string
+            required:
+                - statusCode
+                - error
+                - message
+            additionalProperties: false
