@@ -1,6 +1,6 @@
 {
   "name": "mappable-test-server",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": "true",
   "description": "",
   "main": "index.js",
