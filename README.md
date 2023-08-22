@@ -1,6 +1,8 @@
 # Test server for returning data by tiles and bbox
 
-[API&Demo](https://mappable-test-server-d7778c5d7460.herokuapp.com/v1/api_docs/)
+- [API&Demo](https://mappable-test-server-d7778c5d7460.herokuapp.com/v1/api_docs/)
+- [Contributing](./CONTRIBUTING.md)
+- [License](./LICENSE)
 
 The test server demonstrates work with subloading data by tiles and by bbox (lower left, upper right points).
 
