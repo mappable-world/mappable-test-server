@@ -29,9 +29,9 @@ services:
     depends_on:
       - db
     image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: postgres@admin.com
-      PGADMIN_DEFAULT_PASSWORD: qwertyuiop
+    env_file:
+      - .env
+
     ports:
       - '8999:80'
     restart: always
