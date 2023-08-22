@@ -6,6 +6,7 @@ import {asyncMiddleware} from './lib/async-middlware';
 import {loadByBBox} from './middleware/load-by-bbox';
 import {loadByTile} from './middleware/load-by-tile';
 import {DataProvider} from "./data-provider/interface";
+import {apiDocs} from "./middleware/api-docs";
 
 export function createApp(dataProvider: DataProvider) {
     return (
@@ -16,6 +17,7 @@ export function createApp(dataProvider: DataProvider) {
             .get('/ping', asyncMiddleware(pingMiddleware.bind(null, dataProvider)))
             .post('/v1/bbox', asyncMiddleware(loadByBBox.bind(null, dataProvider)))
             .post('/v1/tile', asyncMiddleware(loadByTile.bind(null, dataProvider)))
+            .use('/v1/api_docs', apiDocs)
             .use((req: express.Request, res: express.Response, next: express.NextFunction) =>
                 next(Boom.notFound('Endpoint not found'))
             )
