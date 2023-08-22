@@ -16,7 +16,7 @@ COPY --from=build /opt/server/dist dist
 COPY ./docs/ ./docs/
 COPY ./package-lock.json ./package-lock.json
 COPY ./package.json ./package.json
-COPY ./.env ./.env
+#COPY ./.env ./.env
 
 RUN npm ci --production
 RUN npm install --global pm2@latest
