@@ -5,6 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "heroku:push": "heroku container:push web --app mappable-test-server",
+    "heroku:release": "heroku container:release web --app mappable-test-server",
     "build": "tsc -b tsconfig.json",
     "dev": "ts-node ./src/index.ts",
     "start": "nodemon",
