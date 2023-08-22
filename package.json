@@ -8,6 +8,7 @@
     "build": "tsc -b tsconfig.json",
     "dev": "ts-node ./src/index.ts",
     "start": "nodemon",
+    "start:prod": "pm2-runtime --instances max dist/index.js",
     "lint": "eslint ./ && tsc --noemit --noErrorTruncation",
     "test": "jest"
   },
