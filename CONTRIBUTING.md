@@ -10,7 +10,8 @@ touch .env
 
 Editing the `.env` file. In it, we indicate with what login and password the test database will be created and how to connect to it.
 
-В таком формате:
+In this format:
+
 ```dotenv
 DB_NAME=api
 DB_USER=postgres
