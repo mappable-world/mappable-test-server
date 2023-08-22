@@ -7,6 +7,7 @@ import {loadByBBox} from './middleware/load-by-bbox';
 import {loadByTile} from './middleware/load-by-tile';
 import {DataProvider} from "./data-provider/interface";
 import {apiDocs} from "./middleware/api-docs";
+import {versionMiddleware} from "./middleware/version";
 
 export function createApp(dataProvider: DataProvider) {
     return (
@@ -14,6 +15,7 @@ export function createApp(dataProvider: DataProvider) {
             .disable('x-powered-by')
             .disable('etag')
             .use(express.json())
+            .get('/version', versionMiddleware)
             .get('/ping', asyncMiddleware(pingMiddleware.bind(null, dataProvider)))
             .post('/v1/bbox', asyncMiddleware(loadByBBox.bind(null, dataProvider)))
             .post('/v1/tile', asyncMiddleware(loadByTile.bind(null, dataProvider)))
