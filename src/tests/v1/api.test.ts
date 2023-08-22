@@ -4,6 +4,8 @@ import {createApp} from '../../app/app';
 import {Bounds, Feature} from '../../app/lib/geo';
 import {DataProvider} from '../../app/data-provider/interface';
 import {TestDataProvider} from '../test-data-provider';
+import fs from 'fs';
+import path from 'path';
 
 describe('/v2', () => {
     let testServer: TestServer;
@@ -34,6 +36,20 @@ describe('/v2', () => {
 
             const result = res.body as {ok: boolean};
             expect(result.ok).toEqual(true);
+        });
+    });
+
+    describe('Version', () => {
+        it('should return version from package.json', async () => {
+            const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../../package.json'), 'utf8')) as {
+                version: string;
+            };
+
+            const res = await testServer.request('version', {json: true});
+            expect(res.statusCode).toEqual(200);
+
+            const result = res.body as {version: string};
+            expect(result.version).toEqual(packageJson.version);
         });
     });
 
