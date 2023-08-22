@@ -1,9 +1,9 @@
-import {DataProvider} from '../app/data-provider/interface';
-import {Bounds, Feature, LngLat} from '../app/lib/geo';
+import {DataProvider} from '../interface';
+import {Bounds, Feature, LngLat} from '../../lib/geo';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-export class TestDataProvider implements DataProvider {
+export class JsonDataProvider implements DataProvider {
     #data: Feature[] = [];
     #isLoading: Promise<void>;
 

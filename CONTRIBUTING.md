@@ -13,6 +13,7 @@ Editing the `.env` file. In it, we indicate with what login and password the tes
 In this format:
 
 ```dotenv
+DATA_PROVIDER="db"
 DB_NAME=api
 DB_USER=postgres
 DB_PASSWORD=secret007
@@ -22,6 +23,8 @@ POSTGRES_PASSWORD="secret007"
 PGADMIN_DEFAULT_EMAIL: postgres@admin.com
 PGADMIN_DEFAULT_PASSWORD: qwertyuiop
 ```
+
+`DATA_PROVIDER` can be `db` or `json`
 
 We start services:
 

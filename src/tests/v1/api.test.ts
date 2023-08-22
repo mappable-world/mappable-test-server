@@ -3,7 +3,7 @@ import {TestServer} from '../test-server';
 import {createApp} from '../../app/app';
 import {Bounds, Feature} from '../../app/lib/geo';
 import {DataProvider} from '../../app/data-provider/interface';
-import {TestDataProvider} from '../test-data-provider';
+import {JsonDataProvider} from '../../app/data-provider/json-data-provider/json-data-provider';
 import fs from 'fs';
 import path from 'path';
 
@@ -14,7 +14,7 @@ describe('/v2', () => {
     beforeAll(async () => {
         nock.disableNetConnect();
         nock.enableNetConnect(/(127.0.0.1|localhost)/);
-        testDataProvider = new TestDataProvider();
+        testDataProvider = new JsonDataProvider();
         await testDataProvider.isReady();
 
         testServer = await TestServer.start(createApp(testDataProvider));
