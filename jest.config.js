@@ -3,6 +3,7 @@ module.exports = {
     verbose: true,
     preset: 'ts-jest',
     automock: false,
+    modulePathIgnorePatterns: ['dist'],
     transform: {
         '^.+\\.tsx?$': [
             'ts-jest',
