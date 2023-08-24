@@ -31,7 +31,7 @@ export async function loadByTile(provider: DataProvider, req: Request, res: Resp
     const y = -((ty / ntiles) * 2 - 1);
 
     const coordinates: Bounds = [fromWorldCoordinates({x, y}), fromWorldCoordinates({x: x + ts, y: y - ts})];
-    const features = await provider.getFeaturesByBBox(coordinates, 100);
+    const features = await provider.getFeaturesByBBox(coordinates, 10000);
 
     res.send({features, bounds: coordinates});
 }
