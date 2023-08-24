@@ -52,30 +52,40 @@ paths:
                 Returns geo features whose coordinates are within the given rectangle bbox
 
             requestBody:
+                description:
+                    JSON object
+                required: true
                 content:
                     application/json:
                         schema:
-                            type: object
-                            required: ['leftBottom', 'rightTop']
-                            properties:
-                                leftBottom:
-                                    $ref: '#/components/schemas/LngLat'
-                                rightTop:
-                                    $ref: '#/components/schemas/LngLat'
+                            allOf:
+                                - $ref: '#/components/schemas/PageRequest'
+                                - type: object
+                                  required: ['leftBottom', 'rightTop']
+                                  example: {
+                                      limit: 1000,
+                                      page: 1,
+                                      leftBottom: [-100, 100],
+                                      rightTop: [100, -100]
+                                  }
+                                  properties:
+                                      limit:
+                                          type: integer
+                                      page:
+                                          type: integer
+                                      leftBottom:
+                                          $ref: '#/components/schemas/LngLat'
+                                      rightTop:
+                                          $ref: '#/components/schemas/LngLat'
 
-                description: JSON object
             responses:
                 200:
                     description: Features list.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    features:
-                                        type: array
-                                        items:
-                                            $ref: '#/components/schemas/Feature'
+                                $ref: '#/components/schemas/Features'
+
                 400:
                     $ref: '#/components/responses/InvalidParameters'
 
@@ -88,34 +98,30 @@ paths:
                 content:
                     application/json:
                         schema:
-                            type: object
-                            required: ['x', 'y', 'z']
-                            properties:
-                                x:
-                                    type: integer
-                                y:
-                                    type: integer
-                                z:
-                                    type: integer
+                            allOf:
+                                - $ref: '#/components/schemas/PageRequest'
+                                - type: object
+                                  properties:
+                                      x:
+                                          type: integer
+                                          required: true
+                                      y:
+                                          type: integer
+                                          required: true
+                                      z:
+                                          type: integer
+                                          required: true
 
                 description: JSON object
+
             responses:
                 200:
                     description: Features list.
                     content:
                         application/json:
                             schema:
-                                type: object
-                                properties:
-                                    bounds:
-                                        description: Computed rectangle of coordinates lower left and upper right corner for a given tile
-                                        items:
-                                            $ref: '#/components/schemas/LngLat'
+                                $ref: '#/components/schemas/FeaturesWithBounds'
 
-                                    features:
-                                        type: array
-                                        items:
-                                            $ref: '#/components/schemas/Feature'
                 400:
                     $ref: '#/components/responses/InvalidParameters'
 
@@ -137,6 +143,18 @@ components:
                 type: number
             minItems: 2
             maxItems: 2
+
+        PageRequest:
+            description: 'Page and limits'
+            type: object
+            properties:
+                limit:
+                    type: integer
+                    minimum: 100
+                    maximum: 10000
+                page:
+                    type: integer
+                    minimum: 1
 
         Feature:
             description: 'GeoJSON Feature'
@@ -162,6 +180,29 @@ components:
                             type: string
                         coordinates:
                             $ref: '#/components/schemas/LngLat'
+
+        Features:
+            type: object
+            properties:
+                total:
+                    type: integer
+                features:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Feature'
+
+        FeaturesWithBounds:
+            allOf:
+                - $ref: '#/components/schemas/Features'
+                - type: object
+                  properties:
+                      bounds:
+                          description: Computed rectangle of coordinates lower left and upper right corner for a given tile
+                          type: array
+                          minLength: 2
+                          maxLength: 2
+                          items:
+                              $ref: '#/components/schemas/LngLat'
 
         Error:
             type: object

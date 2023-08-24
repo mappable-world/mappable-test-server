@@ -8,4 +8,9 @@ const apiSpec = yaml.load(fs.readFileSync(path.join(__dirname, '../../../docs/v1
 
 export const apiDocs = Router()
     .use('/', swaggerUi.serve)
-    .get('/', swaggerUi.setup(apiSpec));
+    .get(
+        '/',
+        swaggerUi.setup(apiSpec, {
+            customSiteTitle: 'Mappable test API'
+        })
+    );

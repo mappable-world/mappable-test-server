@@ -1,4 +1,4 @@
-import {DataProvider} from '../interface';
+import {DataProvider, FeaturesAnswer} from '../interface';
 import {Bounds, Feature, LngLat} from '../../lib/geo';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -11,10 +11,13 @@ export class JsonDataProvider implements DataProvider {
         this.#isLoading = this.__loadData();
     }
 
-    getFeaturesByBBox(bounds: Bounds, counts: number): Promise<Feature[]> {
-        return Promise.resolve(
-            this.#data.filter((f) => this.__isPointInsideBounds(f.geometry.coordinates, bounds)).slice(0, counts)
-        );
+    getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
+        const totalResult = this.#data.filter((f) => this.__isPointInsideBounds(f.geometry.coordinates, bounds));
+
+        return Promise.resolve({
+            total: totalResult.length,
+            features: totalResult.slice((page - 1) * limit, (page - 1) * limit + limit)
+        });
     }
 
     isReady(): Promise<void> {
