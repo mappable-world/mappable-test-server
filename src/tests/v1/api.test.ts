@@ -59,6 +59,7 @@ describe('/v2', () => {
                 const res = await testServer.request('/v1/bbox', {
                     method: 'post',
                     body: {
+                        limit: 102,
                         leftBottom: [-100, 100],
                         rightTop: [100, -100]
                     },
@@ -67,7 +68,7 @@ describe('/v2', () => {
                 expect(res.statusCode).toEqual(200);
 
                 const result = res.body as {features: Feature[]};
-                expect(result.features.length).toEqual(100);
+                expect(result.features.length).toEqual(102);
             });
 
             describe('Incorrect bbox request', () => {
@@ -103,6 +104,35 @@ describe('/v2', () => {
                     [-67.5, 49.11291284486365],
                     [-56.25, 41.17042723849767]
                 ]);
+            });
+
+            describe('Check pagination', () => {
+                it('should return points by page', async () => {
+                    const req = (page?: number) => testServer.request('/v1/tile', {
+                        method: 'post',
+                        body: {
+                            page,
+                            limit: 102,
+                            x: 8,
+                            y: 5,
+                            z: 4
+                        },
+                        json: true
+                    });
+                    const res = await req();
+                    expect(res.statusCode).toEqual(200);
+
+                    const result = res.body as {features: Feature[]; bounds: Bounds};
+                    expect(result.features.length).toEqual(102);
+                    expect(result.features[0].geometry.coordinates).toEqual([6.117642450000062, 46.23698224900005]);
+
+                    const res2 = await req(2);
+                    expect(res2.statusCode).toEqual(200);
+
+                    const result2 = res2.body as {features: Feature[]; bounds: Bounds};
+                    expect(result2.features.length).toEqual(102);
+                    expect(result2.features[0].geometry.coordinates).not.toEqual(result.features[0].geometry.coordinates);
+                });
             });
 
             describe('Incorrect tile request', () => {

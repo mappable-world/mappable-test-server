@@ -7,6 +7,8 @@ import {formatZodError} from '../lib/zod-error';
 const createBBoxRequestSchema = z.object({
     body: z
         .object({
+            limit: z.number().min(100).max(10000).default(1000),
+            page: z.number().min(1).max(10000).default(1),
             leftBottom: z.tuple([z.number(), z.number()]),
             rightTop: z.tuple([z.number(), z.number()])
         })
@@ -19,8 +21,8 @@ export async function loadByBBox(provider: DataProvider, req: Request, res: Resp
         throw Boom.badRequest(formatZodError(validationResult.error));
     }
 
-    const {leftBottom, rightTop} = validationResult.data.body;
-    const features = await provider.getFeaturesByBBox([leftBottom, rightTop], 10000);
+    const {leftBottom, rightTop, limit, page} = validationResult.data.body;
+    const result = await provider.getFeaturesByBBox([leftBottom, rightTop], limit, page);
 
-    res.send({features});
+    res.send({features: result.features, total: result.total});
 }
