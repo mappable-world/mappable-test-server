@@ -20,7 +20,7 @@ export async function loadByBBox(provider: DataProvider, req: Request, res: Resp
     }
 
     const {leftBottom, rightTop} = validationResult.data.body;
-    const features = await provider.getFeaturesByBBox([leftBottom, rightTop], 100);
+    const features = await provider.getFeaturesByBBox([leftBottom, rightTop], 10000);
 
     res.send({features});
 }
