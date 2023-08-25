@@ -1,6 +1,10 @@
 # Contributing
 
-Required to run  [docker-compose](https://docs.docker.com/compose/)
+## Requirements
+
+Required to run [docker-compose](https://docs.docker.com/compose/)
+
+## Getting Started
 
 ```sh
 git clone git@github.com:mappable-world/mappable-test-server.git
@@ -15,16 +19,16 @@ In this format:
 ```dotenv
 DATA_PROVIDER="db"
 DB_NAME=api
+DB_HOST=localhost
 DB_USER=postgres
 DB_PASSWORD=secret007
-DB_HOST=localhost
-POSTGRES_USER="postgres"
-POSTGRES_PASSWORD="secret007"
 PGADMIN_DEFAULT_EMAIL: postgres@admin.com
 PGADMIN_DEFAULT_PASSWORD: qwertyuiop
 ```
 
-`DATA_PROVIDER` can be `db` or `json`
+-   `DATA_PROVIDER` can be `db` or `json`
+-   `DB_PASSWORD` and `DB_USER` make your own, they will be used both when initializing the database and when connecting to it
+-   `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD` Needed to connect to [pgAdmin](https://www.pgadmin.org/), you don't have to set them if you don't use this service
 
 We start services:
 
@@ -55,10 +59,24 @@ npm start
 
 Any changes to the files will automatically restart the test server.
 
+## Testing
+
 To run autotests:
 
 ```sh
 npm test
 ```
 
-When you're done, update the version, add the new tag, and push everything to github. Github actios will automatically roll out the new version to heroku.
+## Deployment
+
+When you're done, update the version, add the new tag, and push everything to github.
+GitHub actions will automatically roll out the new version to heroku.
+
+## Project structure
+
+- `compose` - Folder with data to start services via docker compose
+- `docs` - API specification in [OpenAPI](https://www.openapis.org/) format
+- `src` - TypeScript code
+  - `app` - application's code
+  - `tests` - auto-tests
+  - `tools` - special tools
