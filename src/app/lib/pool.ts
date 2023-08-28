@@ -1,6 +1,6 @@
 import {Pool, QueryResult} from 'pg';
-import {logger} from '../../lib/logger';
-import {stringifyError} from '../../lib/error-handler';
+import {logger} from './logger';
+import {stringifyError} from './error-handler';
 
 export class DB {
     #pool: Pool;

@@ -1,6 +1,6 @@
 import type {DataProvider, FeaturesAnswer} from '../interface';
 import {Bounds, Feature} from '../../lib/geo';
-import {DB} from './pool';
+import {DB} from '../../lib/pool';
 
 export class DbDataProvider implements DataProvider {
     async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
