@@ -72,6 +72,37 @@ describe('/v2', () => {
                 expect(result.features.length).toEqual(102);
             });
 
+            describe('Check pagination', () => {
+                it('should return points by page', async () => {
+                    const req = (page?: number) =>
+                        testServer.request('/v1/bbox', {
+                            method: 'post',
+                            body: {
+                                page,
+                                limit: 102,
+                                leftBottom: [-100, 100],
+                                rightTop: [100, -100]
+                            },
+                            json: true
+                        });
+                    const res = await req();
+                    expect(res.statusCode).toEqual(200);
+
+                    const result = res.body as {features: Feature<Point>[]; bounds: Bounds};
+                    expect(result.features.length).toEqual(102);
+                    expect(result.features[0].geometry.coordinates).toEqual([53.796540969000034, 24.189215755000077]);
+
+                    const res2 = await req(2);
+                    expect(res2.statusCode).toEqual(200);
+
+                    const result2 = res2.body as {features: Feature<Point>[]; bounds: Bounds};
+                    expect(result2.features.length).toEqual(102);
+                    expect(result2.features[0].geometry.coordinates).not.toEqual(
+                        result.features[0].geometry.coordinates
+                    );
+                });
+            });
+
             describe('Incorrect bbox request', () => {
                 it('should return error', async () => {
                     const res = await testServer.request('/v1/bbox', {
@@ -105,38 +136,6 @@ describe('/v2', () => {
                     [-67.5, 48.92249926375823],
                     [-56.25, 40.97989806962013]
                 ]);
-            });
-
-            describe('Check pagination', () => {
-                it('should return points by page', async () => {
-                    const req = (page?: number) =>
-                        testServer.request('/v1/tile', {
-                            method: 'post',
-                            body: {
-                                page,
-                                limit: 102,
-                                x: 8,
-                                y: 5,
-                                z: 4
-                            },
-                            json: true
-                        });
-                    const res = await req();
-                    expect(res.statusCode).toEqual(200);
-
-                    const result = res.body as {features: Feature<Point>[]; bounds: Bounds};
-                    expect(result.features.length).toEqual(102);
-                    expect(result.features[0].geometry.coordinates).toEqual([6.117642450000062, 46.23698224900005]);
-
-                    const res2 = await req(2);
-                    expect(res2.statusCode).toEqual(200);
-
-                    const result2 = res2.body as {features: Feature<Point>[]; bounds: Bounds};
-                    expect(result2.features.length).toEqual(102);
-                    expect(result2.features[0].geometry.coordinates).not.toEqual(
-                        result.features[0].geometry.coordinates
-                    );
-                });
             });
 
             describe('Incorrect tile request', () => {

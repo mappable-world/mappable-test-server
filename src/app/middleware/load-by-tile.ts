@@ -10,7 +10,6 @@ const createTileRequestSchema = z.object({
     body: z
         .object({
             limit: z.number().min(100).max(10000).default(1000),
-            page: z.number().min(1).max(10000).default(1),
             x: z.number().min(0),
             y: z.number().min(0),
             z: z.number().min(0)
@@ -24,10 +23,10 @@ export async function loadByTile(provider: DataProvider, req: Request, res: Resp
         throw Boom.badRequest(formatZodError(validationResult.error));
     }
 
-    const {x: tx, y: ty, z: tz, limit, page} = validationResult.data.body;
+    const {x: tx, y: ty, z: tz, limit} = validationResult.data.body;
 
     const coordinates: Bounds = tileToWorld(tx, ty, tz).map(fromWorldCoordinates) as Bounds;
-    const result = await provider.getFeaturesByBBox(coordinates, limit, page);
+    const result = await provider.getFeaturesByBBox(coordinates, limit);
 
     res.send({features: result.features, total: result.total, bounds: coordinates});
 }
