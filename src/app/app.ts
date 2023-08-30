@@ -6,12 +6,12 @@ import {logger} from './lib/logger';
 import {asyncMiddleware} from './lib/async-middlware';
 import {loadByBBox} from './middleware/load-by-bbox';
 import {loadByTile} from './middleware/load-by-tile';
-import {DataProvider} from "./data-provider/interface";
-import {apiDocs} from "./middleware/api-docs";
-import {versionMiddleware} from "./middleware/version";
-import * as process from "process";
+import {apiDocs} from './middleware/api-docs';
+import {versionMiddleware} from './middleware/version';
+import * as process from 'process';
+import {makeDataProvider} from './middleware/data-provider';
 
-export function createApp(dataProvider: DataProvider) {
+export function createApp() {
     const ORIGINS = process.env.ORIGINS ? process.env.ORIGINS.split(' ') : true;
 
     return (
@@ -19,15 +19,18 @@ export function createApp(dataProvider: DataProvider) {
             .disable('x-powered-by')
             .disable('etag')
             .use(express.json())
+            .use(asyncMiddleware(makeDataProvider))
             .get('/version', versionMiddleware)
-            .get('/ping', asyncMiddleware(pingMiddleware.bind(null, dataProvider)))
+            .get('/ping', pingMiddleware)
             .use('/v1/api_docs', apiDocs)
-            .use(cors({
-                origin: ORIGINS,
-                methods: ['POST']
-            }))
-            .post('/v1/bbox', asyncMiddleware(loadByBBox.bind(null, dataProvider)))
-            .post('/v1/tile', asyncMiddleware(loadByTile.bind(null, dataProvider)))
+            .use(
+                cors({
+                    origin: ORIGINS,
+                    methods: ['POST']
+                })
+            )
+            .post('/v1/bbox', asyncMiddleware(loadByBBox))
+            .post('/v1/tile', asyncMiddleware(loadByTile))
             .use((req: express.Request, res: express.Response, next: express.NextFunction) =>
                 next(Boom.notFound('Endpoint not found'))
             )

@@ -1,5 +1,4 @@
 import {Request, Response} from 'express';
-import {DataProvider} from '../data-provider/interface';
 import {z} from 'zod';
 import * as Boom from '@hapi/boom';
 import {formatZodError} from '../lib/zod-error';
@@ -17,7 +16,7 @@ const createTileRequestSchema = z.object({
         .strict()
 });
 
-export async function loadByTile(provider: DataProvider, req: Request, res: Response): Promise<void> {
+export async function loadByTile(req: Request, res: Response): Promise<void> {
     const validationResult = createTileRequestSchema.safeParse(req);
     if (!validationResult.success) {
         throw Boom.badRequest(formatZodError(validationResult.error));
@@ -26,7 +25,7 @@ export async function loadByTile(provider: DataProvider, req: Request, res: Resp
     const {x: tx, y: ty, z: tz, limit} = validationResult.data.body;
 
     const coordinates: Bounds = tileToWorld(tx, ty, tz).map(fromWorldCoordinates) as Bounds;
-    const result = await provider.getFeaturesByBBox(coordinates, limit);
+    const result = await req.dataProvider.getFeaturesByBBox(coordinates, limit);
 
     res.send({features: result.features, total: result.total, bounds: coordinates});
 }

@@ -1,5 +1,4 @@
 import {Request, Response} from 'express';
-import {DataProvider} from '../data-provider/interface';
 import {z} from 'zod';
 import * as Boom from '@hapi/boom';
 import {formatZodError} from '../lib/zod-error';
@@ -15,14 +14,14 @@ const createBBoxRequestSchema = z.object({
         .strict()
 });
 
-export async function loadByBBox(provider: DataProvider, req: Request, res: Response): Promise<void> {
+export async function loadByBBox(req: Request, res: Response): Promise<void> {
     const validationResult = createBBoxRequestSchema.safeParse(req);
     if (!validationResult.success) {
         throw Boom.badRequest(formatZodError(validationResult.error));
     }
 
     const {leftBottom, rightTop, limit, page} = validationResult.data.body;
-    const result = await provider.getFeaturesByBBox([leftBottom, rightTop], limit, page);
+    const result = await req.dataProvider.getFeaturesByBBox([leftBottom, rightTop], limit, page);
 
     res.send({features: result.features, total: result.total});
 }

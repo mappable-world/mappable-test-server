@@ -1,9 +1,8 @@
 import type {Request, Response} from 'express';
-import {DataProvider} from '../data-provider/interface';
 
-export const pingMiddleware = async (provider: DataProvider, _: Request, res: Response) => {
+export const pingMiddleware = async (req: Request, res: Response) => {
     try {
-        await provider.isReady();
+        await req.dataProvider.isReady();
     } catch (error: unknown) {
         res.status(500).send({ok: false});
         return;
