@@ -6,13 +6,12 @@
 
 To set up the test server, you can obtain data from the website http://geojson.xyz/.
 Choose any file that contains points on the map.
-Then, create an SQL file using the following command:
+After that, you can load the data into the database on your test service.
 
 For example:
 
 ```sh
-ts-node ./src/tools/geojson-to-table-points-sql.ts https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_admin_1_label_points.geojson ./points.sql
-docker compose exec db psql -U postgres api < ./points.sql
+docker compose exec web node ./dist/tools/geojson-to-table-points-sql.js https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_admin_1_label_points.geojson
 ```
 
 The test server demonstrates how to load data by tiles and bbox (lower left and upper right points).
