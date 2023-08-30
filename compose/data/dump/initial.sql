@@ -13,17 +13,15 @@ COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
 SET default_tablespace = '';
 SET default_table_access_method = heap;
 
-DROP TABLE IF EXISTS public.points;
-CREATE TABLE public.points (
-    uid uuid DEFAULT public.gen_random_uuid() NOT NULL,
+DROP TABLE IF EXISTS points;
+CREATE TABLE points (
+    uid uuid DEFAULT gen_random_uuid() NOT NULL,
     coordinates geography(POINT, 4326) NOT NULL,
-    json "json"
+    json "json" NOT NULL
 );
 
 
-ALTER TABLE public.points OWNER TO postgres;
-
-ALTER TABLE ONLY public.points
+ALTER TABLE ONLY points
     ADD CONSTRAINT points_pkey PRIMARY KEY (uid);
 
 CREATE INDEX global_points_gix ON points USING GIST ( coordinates );
