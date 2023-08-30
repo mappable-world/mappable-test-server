@@ -1,11 +1,12 @@
 import * as nock from 'nock';
 import {TestServer} from '../test-server';
 import {createApp} from '../../app/app';
-import {Bounds, Feature} from '../../app/lib/geo';
-import {DataProvider} from '../../app/data-provider/interface';
+import type {Bounds} from '../../app/lib/geo';
+import type {DataProvider} from '../../app/data-provider/interface';
 import {JsonDataProvider} from '../../app/data-provider/json-data-provider/json-data-provider';
 import fs from 'fs';
 import path from 'path';
+import {Feature, Point} from 'geojson';
 
 describe('/v2', () => {
     let testServer: TestServer;
@@ -13,7 +14,7 @@ describe('/v2', () => {
 
     beforeAll(async () => {
         nock.disableNetConnect();
-        nock.enableNetConnect(/(127.0.0.1|localhost)/);
+        nock.enableNetConnect(/(127.0.0.1|localhost|cloudfront.net)/);
         testDataProvider = new JsonDataProvider();
         await testDataProvider.isReady();
 
@@ -67,7 +68,7 @@ describe('/v2', () => {
                 });
                 expect(res.statusCode).toEqual(200);
 
-                const result = res.body as {features: Feature[]};
+                const result = res.body as {features: Feature<Point>[]};
                 expect(result.features.length).toEqual(102);
             });
 
@@ -108,30 +109,33 @@ describe('/v2', () => {
 
             describe('Check pagination', () => {
                 it('should return points by page', async () => {
-                    const req = (page?: number) => testServer.request('/v1/tile', {
-                        method: 'post',
-                        body: {
-                            page,
-                            limit: 102,
-                            x: 8,
-                            y: 5,
-                            z: 4
-                        },
-                        json: true
-                    });
+                    const req = (page?: number) =>
+                        testServer.request('/v1/tile', {
+                            method: 'post',
+                            body: {
+                                page,
+                                limit: 102,
+                                x: 8,
+                                y: 5,
+                                z: 4
+                            },
+                            json: true
+                        });
                     const res = await req();
                     expect(res.statusCode).toEqual(200);
 
-                    const result = res.body as {features: Feature[]; bounds: Bounds};
+                    const result = res.body as {features: Feature<Point>[]; bounds: Bounds};
                     expect(result.features.length).toEqual(102);
                     expect(result.features[0].geometry.coordinates).toEqual([6.117642450000062, 46.23698224900005]);
 
                     const res2 = await req(2);
                     expect(res2.statusCode).toEqual(200);
 
-                    const result2 = res2.body as {features: Feature[]; bounds: Bounds};
+                    const result2 = res2.body as {features: Feature<Point>[]; bounds: Bounds};
                     expect(result2.features.length).toEqual(102);
-                    expect(result2.features[0].geometry.coordinates).not.toEqual(result.features[0].geometry.coordinates);
+                    expect(result2.features[0].geometry.coordinates).not.toEqual(
+                        result.features[0].geometry.coordinates
+                    );
                 });
             });
 

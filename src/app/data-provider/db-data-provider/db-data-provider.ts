@@ -1,5 +1,6 @@
 import type {DataProvider, FeaturesAnswer} from '../interface';
-import {Bounds, Feature} from '../../lib/geo';
+import type {Feature, Point} from 'geojson';
+import type {Bounds} from '../../lib/geo';
 import {DB} from '../../lib/pool';
 
 export class DbDataProvider implements DataProvider {
@@ -14,7 +15,7 @@ export class DbDataProvider implements DataProvider {
 
         return {
             total: total.cnt,
-            features: points.rows as Feature[]
+            features: points.rows as Feature<Point>[]
         };
     }
 

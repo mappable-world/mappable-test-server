@@ -1,4 +1,4 @@
-FROM node:16.15.0-alpine as build
+FROM node:18.17.1-alpine as build
 
 WORKDIR /opt/server
 
@@ -7,7 +7,7 @@ COPY . .
 RUN npm ci
 RUN npm run build
 
-FROM --platform=linux/amd64 node:16.15.0-alpine as production
+FROM --platform=linux/amd64 node:18.17.1-alpine as production
 
 ENV PORT 8080
 WORKDIR /opt/server
