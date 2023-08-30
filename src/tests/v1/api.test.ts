@@ -101,8 +101,8 @@ describe('/v2', () => {
                 const result = res.body as {features: Feature[]; bounds: Bounds};
                 expect(result.features.length).toEqual(21);
                 expect(result.bounds).toEqual([
-                    [-67.5, 49.11291284486365],
-                    [-56.25, 41.17042723849767]
+                    [-67.5, 48.92249926375823],
+                    [-56.25, 40.97989806962013]
                 ]);
             });
 
