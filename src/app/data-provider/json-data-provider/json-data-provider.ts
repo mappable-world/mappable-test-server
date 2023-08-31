@@ -1,10 +1,8 @@
 import {DataProvider, type FeaturesAnswer} from '../interface';
 import type {Bounds, LngLat} from '../../lib/geo';
 import type {Feature, FeatureCollection, Point} from 'geojson';
-import * as process from 'process';
 import got from 'got';
-
-const DEFAULT_JSON_URL = 'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_admin_1_label_points.geojson';
+import {config} from '../../config';
 
 export class JsonDataProvider implements DataProvider {
     #data: Feature<Point>[] = [];
@@ -12,7 +10,7 @@ export class JsonDataProvider implements DataProvider {
     #jsonUrl: string;
 
     constructor() {
-        this.#jsonUrl = process.env.POINTS_JSON || DEFAULT_JSON_URL;
+        this.#jsonUrl = config.pointsImportUrl;
         this.#isLoading = this.__loadData();
     }
 

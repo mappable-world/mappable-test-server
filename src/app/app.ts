@@ -10,10 +10,9 @@ import {apiDocs} from './middleware/api-docs';
 import {versionMiddleware} from './middleware/version';
 import * as process from 'process';
 import {makeDataProvider} from './middleware/data-provider';
+import {config} from './config';
 
 export function createApp() {
-    const ORIGINS = process.env.ORIGINS ? process.env.ORIGINS.split(' ') : true;
-
     return (
         express()
             .disable('x-powered-by')
@@ -23,12 +22,7 @@ export function createApp() {
             .get('/version', versionMiddleware)
             .get('/ping', pingMiddleware)
             .use('/v1/api_docs', apiDocs)
-            .use(
-                cors({
-                    origin: ORIGINS,
-                    methods: ['POST']
-                })
-            )
+            .use(cors(config.cors))
             .post('/v1/bbox', asyncMiddleware(loadByBBox))
             .post('/v1/tile', asyncMiddleware(loadByTile))
             .use((req: express.Request, res: express.Response, next: express.NextFunction) =>

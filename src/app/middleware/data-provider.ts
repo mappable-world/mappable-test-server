@@ -4,6 +4,7 @@ import {z} from 'zod';
 import {getDataProvider} from '../data-provider';
 import * as Boom from '@hapi/boom';
 import {formatZodError} from '../lib/zod-error';
+import {config} from '../config';
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -17,7 +18,7 @@ declare global {
 const requestSchema = z.object({
     query: z
         .object({
-            provider: z.enum(['db', 'json']).default((process.env.DATA_PROVIDER as 'db') ?? 'json')
+            provider: z.enum(['db', 'json']).default(config.defaultProvider)
         })
         .strict()
 });
@@ -28,5 +29,5 @@ export const makeDataProvider = (req: Request) => {
         throw Boom.badRequest(formatZodError(validationResult.error));
     }
 
-    req.dataProvider = getDataProvider(req.body.provider);
+    req.dataProvider = getDataProvider(validationResult.data.query.provider);
 };

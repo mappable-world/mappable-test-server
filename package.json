@@ -7,12 +7,12 @@
   "scripts": {
     "heroku:push": "heroku container:push web --app mappable-test-server",
     "heroku:release": "heroku container:release web --app mappable-test-server",
-    "build": "tsc -b tsconfig.json",
+    "build": "ENVIRONMENT=production tsc -b tsconfig.json",
     "dev": "ts-node ./src/index.ts",
     "start": "nodemon",
     "start:prod": "pm2-runtime --instances max dist/index.js",
     "lint": "eslint ./ && tsc --noemit --noErrorTruncation",
-    "test": "jest",
+    "test": "ENVIRONMENT=testing jest",
     "bump": "npm version patch --no-git-tag-version && npm run bump:git",
     "bump:git": "git add --all && git commit -m \"New version $npm_package_version\" && git tag $npm_package_version && git push --tags origin HEAD:main"
   },
