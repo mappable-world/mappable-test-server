@@ -4,56 +4,15 @@ info:
     title: Mappable test server
     license:
         name: 'Apache-2'
+
 paths:
-    /version:
-        get:
-            description: Application Version
-            responses:
-                200:
-                    description: Version
-                    content:
-                        application/json:
-                            example: {'version': '1.0.0'}
-                            schema:
-                                type: object
-                                properties:
-                                    version:
-                                        type: string
-
-    /ping:
-        get:
-            description: |
-                Handle for checking the readiness of the server to work
-            responses:
-                200:
-                    description: Server is ready.
-                    content:
-                        application/json:
-                            example: {'ok': true}
-                            schema:
-                                type: object
-                                properties:
-                                    ok:
-                                        type: boolean
-                400:
-                    description: Server is not ready.
-                    content:
-                        application/json:
-                            example: {'ok': false}
-                            schema:
-                                type: object
-                                properties:
-                                    ok:
-                                        type: boolean
-
     /v1/bbox:
         post:
             description: |
                 Returns geo features whose coordinates are within the given rectangle bbox
 
             requestBody:
-                description:
-                    JSON object
+                description: JSON object
                 required: true
                 content:
                     application/json:
@@ -62,12 +21,7 @@ paths:
                                 - $ref: '#/components/schemas/PageRequest'
                                 - type: object
                                   required: ['leftBottom', 'rightTop']
-                                  example: {
-                                      limit: 1000,
-                                      page: 1,
-                                      leftBottom: [-100, 100],
-                                      rightTop: [100, -100]
-                                  }
+                                  example: {limit: 1000, page: 1, leftBottom: [-100, 100], rightTop: [100, -100]}
                                   properties:
                                       limit:
                                           type: integer
@@ -124,6 +78,47 @@ paths:
 
                 400:
                     $ref: '#/components/responses/InvalidParameters'
+
+    /version:
+        get:
+            description: Application Version
+            responses:
+                200:
+                    description: Version
+                    content:
+                        application/json:
+                            example: {'version': '1.0.0'}
+                            schema:
+                                type: object
+                                properties:
+                                    version:
+                                        type: string
+
+    /ping:
+        get:
+            description: |
+                Handle for checking the readiness of the server to work
+            responses:
+                200:
+                    description: Server is ready.
+                    content:
+                        application/json:
+                            example: {'ok': true}
+                            schema:
+                                type: object
+                                properties:
+                                    ok:
+                                        type: boolean
+                400:
+                    description: Server is not ready.
+                    content:
+                        application/json:
+                            example: {'ok': false}
+                            schema:
+                                type: object
+                                properties:
+                                    ok:
+                                        type: boolean
 
 components:
     responses:
