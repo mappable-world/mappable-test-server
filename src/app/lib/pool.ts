@@ -1,6 +1,5 @@
 import {Pool, QueryResult} from 'pg';
 import {logger} from './logger';
-import {stringifyError} from './error-handler';
 import {config} from '../config';
 
 export class DB {
@@ -24,7 +23,15 @@ export class DB {
         try {
             return await this.#pool.query(sql, values);
         } catch (e) {
-            logger.error(stringifyError(e as Error));
+            const result: Record<string, unknown> = {};
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const _e = e as any;
+
+            for (const key of Object.getOwnPropertyNames(e)) {
+                result[key] = _e[key];
+            }
+
+            logger.error(JSON.stringify(result));
             throw e;
         }
     }
