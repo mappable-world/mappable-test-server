@@ -22,8 +22,8 @@ DB_NAME=api
 DB_HOST=localhost
 DB_USER=postgres
 DB_PASSWORD=secret007
-PGADMIN_DEFAULT_EMAIL: postgres@admin.com
-PGADMIN_DEFAULT_PASSWORD: qwertyuiop
+PGADMIN_DEFAULT_EMAIL=postgres@admin.com
+PGADMIN_DEFAULT_PASSWORD=qwertyuiop
 ```
 
 -   `DATA_PROVIDER` can be `db` or `json`
