@@ -11,7 +11,7 @@ After that, you can load the data into the database on your test service.
 For example:
 
 ```sh
-docker compose exec web node ./dist/tools/geojson-to-table-points-sql.js https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_admin_1_label_points.geojson
+docker compose exec web POINTS_JSON=https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_admin_1_label_points.geojson node ./dist/tools/geojson-to-table-points-sql.js
 ```
 
 The test server demonstrates how to load data by tiles and bbox (lower left and upper right points).

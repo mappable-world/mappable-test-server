@@ -4,14 +4,15 @@ import got from 'got';
 import type {FeatureCollection, Point} from 'geojson';
 import {DB} from '../app/lib/pool';
 import dotenv from 'dotenv';
+import {config} from "../app/config";
 
 dotenv.config();
 
-// ts-node ./src/tools/geojson-to-table-points-sql.ts https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_admin_1_label_points.geojson
+// POINTS_JSON=https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_admin_1_label_points.geojson ts-node ./src/tools/geojson-to-table-points-sql.ts
 
-const file = process.argv[2];
 
-const fileUrl = new URL(file);
+const fileUrl = new URL(config.pointsImportUrl);
+
 if (!fileUrl.protocol || !fileUrl.host || !fileUrl.pathname) {
     console.error('Incorrect file url');
     process.exit(0);
