@@ -24,12 +24,12 @@ curl -X 'POST' \
   -H 'Content-Type: application/json' \
   -d '{
   "leftBottom": [
-    24,
+    23,
     54
   ],
   "rightTop": [
     24,
-    54
+    44
   ]
 }'
 ```
