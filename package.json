@@ -20,7 +20,7 @@
     "url": "git+https://github.com/mappable-world/mappable-test-server.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Mappable authors",
   "license": "Apache-2",
   "dependencies": {
     "@hapi/boom": "^10.0.1",

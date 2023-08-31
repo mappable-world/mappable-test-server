@@ -8,7 +8,6 @@ import {loadByBBox} from './middleware/load-by-bbox';
 import {loadByTile} from './middleware/load-by-tile';
 import {apiDocs} from './middleware/api-docs';
 import {versionMiddleware} from './middleware/version';
-import * as process from 'process';
 import {makeDataProvider} from './middleware/data-provider';
 import {config} from './config';
 

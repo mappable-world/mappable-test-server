@@ -1,11 +1,12 @@
 import type {DataProvider, FeaturesAnswer} from '../interface';
 import type {Feature, Point} from 'geojson';
 import type {Bounds} from '../../lib/geo';
-import {DB} from '../../lib/pool';
+import {Pool} from 'pg';
+import {config} from '../../config';
 
 export class DbDataProvider implements DataProvider {
     async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
-        const db = DB.getInstance();
+        const db = new Pool(config.db);
         const query = (fields: string) =>
             `select ${fields} from points where coordinates && ST_MakeEnvelope($1, $2, $3, $4)`;
 
@@ -24,6 +25,7 @@ export class DbDataProvider implements DataProvider {
     }
 
     async isReady(): Promise<void> {
-        await DB.getInstance().query('select now()');
+        const db = new Pool(config.db);
+        await db.query('select now()');
     }
 }
