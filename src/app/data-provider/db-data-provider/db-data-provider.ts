@@ -7,11 +7,15 @@ export class DbDataProvider implements DataProvider {
     async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
         const db = DB.getInstance();
         const query = (fields: string) =>
-            `select ${fields} from public.points where ST_MakeEnvelope($1, $2, $3, $4) ~ coordinates`;
+            `select ${fields} from points where coordinates && ST_MakeEnvelope($1, $2, $3, $4)`;
 
-        const [total] = (await db.query(`${query('count(uuid) as cnt')} limit $5`, bounds.flat())).rows;
+        const [total] = (await db.query(query('count(uid) as cnt'), bounds.flat())).rows;
 
-        const points = await db.query(`${query('feature')} limit $5 $6`, [...bounds.flat(), limit, limit * (page - 1)]);
+        const points = await db.query(`${query('feature')} limit $5 offset $6`, [
+            ...bounds.flat(),
+            limit,
+            limit * (page - 1)
+        ]);
 
         return {
             total: total.cnt,
