@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS points;
 CREATE TABLE points (
     uid uuid DEFAULT gen_random_uuid() NOT NULL,
     coordinates geography(POINT, 4326) NOT NULL,
-    json "json" NOT NULL
+    feature json NOT NULL
 );
 
 

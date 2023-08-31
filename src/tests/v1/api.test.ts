@@ -18,7 +18,7 @@ describe('/v2', () => {
         testDataProvider = new JsonDataProvider();
         await testDataProvider.isReady();
 
-        testServer = await TestServer.start(createApp(testDataProvider));
+        testServer = await TestServer.start(createApp());
     });
 
     afterAll(async () => {

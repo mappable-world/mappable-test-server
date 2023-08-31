@@ -23,6 +23,9 @@ services:
     ports:
       - '5432:5432'
     restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
 
   pgadmin:
     container_name: pgadmin

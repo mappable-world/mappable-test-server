@@ -11,7 +11,7 @@ export class DbDataProvider implements DataProvider {
 
         const [total] = (await db.query(`${query('count(uuid) as cnt')} limit $5`, bounds.flat())).rows;
 
-        const points = await db.query(`${query('json')} limit $5 $6`, [...bounds.flat(), limit, limit * (page - 1)]);
+        const points = await db.query(`${query('feature')} limit $5 $6`, [...bounds.flat(), limit, limit * (page - 1)]);
 
         return {
             total: total.cnt,
