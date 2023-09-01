@@ -70,7 +70,7 @@ paths:
                                 $ref: '#/components/schemas/Features'
 
                 400:
-                    $ref: '#/components/responses/InvalidParameters'
+                    $ref: '#/components/responses/BadRequest'
 
     /v1/tile:
         get:
@@ -108,7 +108,7 @@ paths:
                                 $ref: '#/components/schemas/FeaturesWithBounds'
 
                 400:
-                    $ref: '#/components/responses/InvalidParameters'
+                    $ref: '#/components/responses/BadRequest'
 
     /version:
         get:
@@ -153,8 +153,8 @@ paths:
 
 components:
     responses:
-        InvalidParameters:
-            description: Invalid parameters.
+        BadRequest:
+            description: Bad request
             content:
                 application/json:
                     schema:
@@ -231,4 +231,5 @@ components:
                 - statusCode
                 - error
                 - message
+
             additionalProperties: false
