@@ -7,7 +7,7 @@ export interface DataProvider {
     /**
      * Check if data provider is ready to work
      */
-    isReady(): Promise<void>;
+    ready(): Promise<void>;
 }
 
 export interface FeaturesAnswer {

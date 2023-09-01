@@ -15,7 +15,7 @@ export class JsonDataProvider implements DataProvider {
     }
 
     async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
-        await this.isReady();
+        await this.#isLoading;
 
         const totalResult = this.#data.filter((f) =>
             this.__isPointInsideBounds(f.geometry.coordinates as LngLat, bounds)
@@ -27,7 +27,7 @@ export class JsonDataProvider implements DataProvider {
         });
     }
 
-    isReady(): Promise<void> {
+    ready(): Promise<void> {
         return this.#isLoading;
     }
 

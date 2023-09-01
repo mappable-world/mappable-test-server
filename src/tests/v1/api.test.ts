@@ -2,22 +2,16 @@ import * as nock from 'nock';
 import {TestServer} from '../test-server';
 import {createApp} from '../../app/app';
 import type {Bounds} from '../../app/lib/geo';
-import type {DataProvider} from '../../app/data-provider/interface';
-import {JsonDataProvider} from '../../app/data-provider/json-data-provider/json-data-provider';
 import fs from 'fs';
 import path from 'path';
 import {Feature, Point} from 'geojson';
 
 describe('/v1', () => {
     let testServer: TestServer;
-    let testDataProvider: DataProvider;
 
     beforeAll(async () => {
         nock.disableNetConnect();
         nock.enableNetConnect(/(127.0.0.1|localhost|cloudfront.net)/);
-        testDataProvider = new JsonDataProvider();
-        await testDataProvider.isReady();
-
         testServer = await TestServer.start(createApp());
     });
 

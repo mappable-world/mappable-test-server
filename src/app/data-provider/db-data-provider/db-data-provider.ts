@@ -28,7 +28,7 @@ export class DbDataProvider implements DataProvider {
         };
     }
 
-    async isReady(): Promise<void> {
+    async ready(): Promise<void> {
         await this.#db.query('select now()');
     }
 }
