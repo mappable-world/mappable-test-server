@@ -15,7 +15,7 @@ services:
 
   db:
     # To work with search by coordinates
-    image: postgis/postgis:12-3.4-alpine
+    image: postgis/postgis:15-3.4-alpine
     env_file:
       - .env
     volumes:

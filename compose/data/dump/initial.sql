@@ -6,10 +6,6 @@ ALTER DATABASE api OWNER TO postgres;
 
 CREATE EXTENSION IF NOT EXISTS postgis;
 
-CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
-COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
-
-
 SET default_tablespace = '';
 SET default_table_access_method = heap;
 
