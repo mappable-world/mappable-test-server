@@ -17,21 +17,16 @@ docker compose exec web POINTS_JSON=https://d2ad6b4ur7yvpq.cloudfront.net/natura
 The test server demonstrates how to load data by tiles and bbox (lower left and upper right points).
 You can make a POST request to the server's /v1/bbox endpoint to retrieve data within a specific bounding box:
 
+By bbox:
+
 ```sh
-curl -X 'POST' \
-  'https://mappable-test-server-d7778c5d7460.herokuapp.com/v1/bbox' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "leftBottom": [
-    23,
-    54
-  ],
-  "rightTop": [
-    24,
-    44
-  ]
-}'
+curl -X 'https://mappable-test-server-d7778c5d7460.herokuapp.com/v1/bbox?lng1=23&lat1=54&lng2=24&lat2=44'
+```
+
+By tile:
+
+```sh
+curl -X 'https://mappable-test-server-d7778c5d7460.herokuapp.com/v1/tile?x=1&y=1&z=1'
 ```
 
 This will return the data within the specified bounding box.
