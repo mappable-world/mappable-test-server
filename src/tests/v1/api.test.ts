@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import {Feature, Point} from 'geojson';
 
-describe('/v2', () => {
+describe('/v1', () => {
     let testServer: TestServer;
     let testDataProvider: DataProvider;
 
