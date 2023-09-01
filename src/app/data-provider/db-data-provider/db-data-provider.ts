@@ -5,14 +5,18 @@ import {Pool} from 'pg';
 import {config} from '../../config';
 
 export class DbDataProvider implements DataProvider {
+    #db: Pool;
+
+    constructor() {
+        this.#db = new Pool(config.db);
+    }
     async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
-        const db = new Pool(config.db);
         const query = (fields: string) =>
             `select ${fields} from points where coordinates && ST_MakeEnvelope($1, $2, $3, $4)`;
 
-        const [total] = (await db.query(query('count(uid) as cnt'), bounds.flat())).rows;
+        const [total] = (await this.#db.query(query('count(uid) as cnt'), bounds.flat())).rows;
 
-        const points = await db.query(`${query('feature')} limit $5 offset $6`, [
+        const points = await this.#db.query(`${query('feature')} limit $5 offset $6`, [
             ...bounds.flat(),
             limit,
             limit * (page - 1)
@@ -25,7 +29,6 @@ export class DbDataProvider implements DataProvider {
     }
 
     async isReady(): Promise<void> {
-        const db = new Pool(config.db);
-        await db.query('select now()');
+        await this.#db.query('select now()');
     }
 }

@@ -7,30 +7,59 @@ info:
 
 paths:
     /v1/bbox:
-        post:
-            description: |
+        get:
+            summary: |
                 Returns geo features whose coordinates are within the given rectangle bbox
 
-            requestBody:
-                description: JSON object
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            allOf:
-                                - $ref: '#/components/schemas/PageRequest'
-                                - type: object
-                                  required: ['leftBottom', 'rightTop']
-                                  example: {limit: 1000, page: 1, leftBottom: [-100, 100], rightTop: [100, -100]}
-                                  properties:
-                                      limit:
-                                          type: integer
-                                      page:
-                                          type: integer
-                                      leftBottom:
-                                          $ref: '#/components/schemas/LngLat'
-                                      rightTop:
-                                          $ref: '#/components/schemas/LngLat'
+            parameters:
+                - in: query
+                  name: lng1
+                  schema:
+                      type: number
+                  required: true
+                  example: 23.5
+                  description: Longitude of the lower left corner of the rectangle
+
+                - in: query
+                  name: lat1
+                  schema:
+                      type: number
+                  required: true
+                  example: 53.5
+                  description: Latitude of the lower left corner of the rectangle
+
+                - in: query
+                  name: lng2
+                  schema:
+                      type: number
+                  required: true
+                  example: 24.5
+                  description: Longitude of the upper right corner of the rectangle
+
+                - in: query
+                  name: lat2
+                  schema:
+                      type: number
+                  required: true
+                  example: 54.5
+                  description: Latitude of the upper right corner of the rectangle
+
+                - in: query
+                  name: limit
+                  schema:
+                      type: number
+                  required: false
+                  example: 100
+                  description: Limit of features to return
+
+                - in: query
+                  name: page
+                  schema:
+                      type: number
+                      minimum: 1
+                  required: false
+                  example: 1
+                  description: Page number
 
             responses:
                 200:
@@ -44,29 +73,31 @@ paths:
                     $ref: '#/components/responses/InvalidParameters'
 
     /v1/tile:
-        post:
-            description: |
+        get:
+            summary: |
                 Returns geo features whose coordinates are within a rectangle that is uniquely defined by its x,y and z tile coordinates
 
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            allOf:
-                                - $ref: '#/components/schemas/PageRequest'
-                                - type: object
-                                  properties:
-                                      x:
-                                          type: integer
-                                          required: true
-                                      y:
-                                          type: integer
-                                          required: true
-                                      z:
-                                          type: integer
-                                          required: true
+            parameters:
+                - in: query
+                  name: x
+                  schema:
+                      type: integer
+                  required: true
+                  example: 10
 
-                description: JSON object
+                - in: query
+                  name: y
+                  schema:
+                      type: integer
+                  required: true
+                  example: 20
+
+                - in: query
+                  name: z
+                  schema:
+                      type: integer
+                  required: true
+                  example: 5
 
             responses:
                 200:
@@ -138,18 +169,6 @@ components:
                 type: number
             minItems: 2
             maxItems: 2
-
-        PageRequest:
-            description: 'Page and limits'
-            type: object
-            properties:
-                limit:
-                    type: integer
-                    minimum: 100
-                    maximum: 10000
-                page:
-                    type: integer
-                    minimum: 1
 
         Feature:
             description: 'GeoJSON Feature'

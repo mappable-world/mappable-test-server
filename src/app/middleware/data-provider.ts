@@ -3,7 +3,7 @@ import {DataProvider} from '../data-provider/interface';
 import {z} from 'zod';
 import {getDataProvider} from '../data-provider';
 import * as Boom from '@hapi/boom';
-import {formatZodError} from '../lib/zod-error';
+import {formatZodError} from '../lib/zod';
 import {config} from '../config';
 
 declare global {
@@ -16,11 +16,9 @@ declare global {
 }
 
 const requestSchema = z.object({
-    query: z
-        .object({
-            provider: z.enum(['db', 'json']).default(config.defaultProvider)
-        })
-        .strict()
+    query: z.object({
+        provider: z.enum(['db', 'json']).default(config.defaultProvider)
+    })
 });
 
 export const makeDataProvider = (req: Request) => {

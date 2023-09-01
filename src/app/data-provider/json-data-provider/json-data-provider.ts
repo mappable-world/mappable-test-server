@@ -14,7 +14,9 @@ export class JsonDataProvider implements DataProvider {
         this.#isLoading = this.__loadData();
     }
 
-    getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
+    async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
+        await this.isReady();
+
         const totalResult = this.#data.filter((f) =>
             this.__isPointInsideBounds(f.geometry.coordinates as LngLat, bounds)
         );

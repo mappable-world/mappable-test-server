@@ -4,12 +4,10 @@ import cors from 'cors';
 import * as Boom from '@hapi/boom';
 import {logger} from './lib/logger';
 import {asyncMiddleware} from './lib/async-middlware';
-import {loadByBBox} from './middleware/load-by-bbox';
-import {loadByTile} from './middleware/load-by-tile';
-import {apiDocs} from './middleware/api-docs';
 import {versionMiddleware} from './middleware/version';
 import {makeDataProvider} from './middleware/data-provider';
 import {config} from './config';
+import {router as v1} from "./v1";
 
 export function createApp() {
     return (
@@ -20,10 +18,8 @@ export function createApp() {
             .use(asyncMiddleware(makeDataProvider))
             .get('/version', versionMiddleware)
             .get('/ping', pingMiddleware)
-            .use('/v1/api_docs', apiDocs)
             .use(cors(config.cors))
-            .post('/v1/bbox', asyncMiddleware(loadByBBox))
-            .post('/v1/tile', asyncMiddleware(loadByTile))
+            .use('/v1/', v1)
             .use((req: express.Request, res: express.Response, next: express.NextFunction) =>
                 next(Boom.notFound('Endpoint not found'))
             )

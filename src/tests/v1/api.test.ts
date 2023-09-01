@@ -57,15 +57,10 @@ describe('/v2', () => {
     describe('Post v1', () => {
         describe('Check bbox', () => {
             it('should return several point inside bbox', async () => {
-                const res = await testServer.request('/v1/bbox', {
-                    method: 'post',
-                    body: {
-                        limit: 102,
-                        leftBottom: [-100, 100],
-                        rightTop: [100, -100]
-                    },
+                const res = await testServer.request('/v1/bbox?lng1=-100&lat1=100&lng2=100&lat2=-100&limit=102', {
                     json: true
                 });
+
                 expect(res.statusCode).toEqual(200);
 
                 const result = res.body as {features: Feature<Point>[]};
@@ -75,17 +70,11 @@ describe('/v2', () => {
             describe('Check pagination', () => {
                 it('should return points by page', async () => {
                     const req = (page?: number) =>
-                        testServer.request('/v1/bbox', {
-                            method: 'post',
-                            body: {
-                                page,
-                                limit: 102,
-                                leftBottom: [-100, 100],
-                                rightTop: [100, -100]
-                            },
+                        testServer.request(`/v1/bbox?lng1=-100&lat1=100&lng2=100&lat2=-100&page=${page}&limit=102`, {
                             json: true
                         });
-                    const res = await req();
+                    const res = await req(1);
+
                     expect(res.statusCode).toEqual(200);
 
                     const result = res.body as {features: Feature<Point>[]; bounds: Bounds};
@@ -105,11 +94,7 @@ describe('/v2', () => {
 
             describe('Incorrect bbox request', () => {
                 it('should return error', async () => {
-                    const res = await testServer.request('/v1/bbox', {
-                        method: 'post',
-                        body: {
-                            leftBottom: [-100, 100]
-                        },
+                    const res = await testServer.request('/v1/bbox?lng1=-100&lat1=100', {
                         json: true
                     });
                     expect(res.statusCode).toEqual(400);
@@ -119,13 +104,7 @@ describe('/v2', () => {
 
         describe('Check tile', () => {
             it('should return several point inside tile', async () => {
-                const res = await testServer.request('/v1/tile', {
-                    method: 'post',
-                    body: {
-                        x: 10,
-                        y: 11,
-                        z: 5
-                    },
+                const res = await testServer.request('/v1/tile?x=10&y=11&z=5', {
                     json: true
                 });
                 expect(res.statusCode).toEqual(200);
@@ -140,12 +119,7 @@ describe('/v2', () => {
 
             describe('Incorrect tile request', () => {
                 it('should return error', async () => {
-                    const res = await testServer.request('/v1/bbox', {
-                        method: 'post',
-                        body: {
-                            x: 10,
-                            y: 11
-                        },
+                    const res = await testServer.request('/v1/bbox?x=10&y=11', {
                         json: true
                     });
                     expect(res.statusCode).toEqual(400);
