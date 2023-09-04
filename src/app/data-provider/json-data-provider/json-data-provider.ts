@@ -1,18 +1,18 @@
-import {DataProvider, type FeaturesAnswer, STATUSES} from '../interface';
+import {DataProvider, type FeaturesAnswer, STATUS} from '../interface';
 import type {Bounds, LngLat} from '../../lib/geo';
 import type {Feature, FeatureCollection, Point} from 'geojson';
 import got from 'got';
 import {config} from '../../config';
 import {logger} from '../../lib/logger';
-import {statuses} from '../../config/constants';
+import {STATUSES} from '../../config/constants';
 
 export class JsonDataProvider implements DataProvider {
     #data: Feature<Point>[] = [];
     #isLoading: Promise<void>;
     #jsonUrl: string;
 
-    #status: STATUSES = statuses.pending;
-    get status(): STATUSES {
+    #status: STATUS = STATUSES.pending;
+    get status(): STATUS {
         return this.#status;
     }
 
@@ -43,10 +43,10 @@ export class JsonDataProvider implements DataProvider {
             const content = await got(this.#jsonUrl);
             const data = JSON.parse(content.body) as FeatureCollection<Point>;
             this.#data = data.features as Feature<Point>[];
-            this.#status = statuses.ready;
+            this.#status = STATUSES.ready;
         } catch (e) {
             logger.error(e);
-            this.#status = statuses.error;
+            this.#status = STATUSES.error;
         }
     }
 

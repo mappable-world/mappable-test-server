@@ -1,7 +1,7 @@
 import type {Bounds} from '../lib/geo';
 import type {Feature, Point} from 'geojson';
 
-export type STATUSES = 'ready' | 'pending' | 'error';
+export type STATUS = 'ready' | 'pending' | 'error';
 
 export interface DataProvider {
     /**
@@ -12,7 +12,7 @@ export interface DataProvider {
     /**
      * Status of data provider
      */
-    readonly status: STATUSES;
+    readonly status: STATUS;
 }
 
 export interface FeaturesAnswer {

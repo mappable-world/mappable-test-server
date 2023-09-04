@@ -1,10 +1,10 @@
-import type {DataProvider, FeaturesAnswer, STATUSES} from '../interface';
+import type {DataProvider, FeaturesAnswer, STATUS} from '../interface';
 import type {Feature, Point} from 'geojson';
 import type {Bounds} from '../../lib/geo';
 import {Pool} from 'pg';
 import {config} from '../../config';
 import {logger} from '../../lib/logger';
-import {statuses} from '../../config/constants';
+import {STATUSES} from '../../config/constants';
 
 export class DbDataProvider implements DataProvider {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -14,10 +14,10 @@ export class DbDataProvider implements DataProvider {
     constructor() {
         try {
             this.#db = new Pool(config.db);
-            this.#status = statuses.ready;
+            this.#status = STATUSES.ready;
         } catch (e) {
             logger.error(e);
-            this.#status = statuses.error;
+            this.#status = STATUSES.error;
         }
     }
     async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
@@ -38,9 +38,9 @@ export class DbDataProvider implements DataProvider {
         };
     }
 
-    #status: STATUSES = statuses.pending;
+    #status: STATUS = STATUSES.pending;
 
-    get status(): STATUSES {
+    get status(): STATUS {
         return this.#status;
     }
 }
