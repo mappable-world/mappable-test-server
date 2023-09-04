@@ -8,10 +8,10 @@ export default interface Config {
         database: string;
         password: string;
         port: number;
-    },
+    };
     pointsImportUrl: string;
     cors: {
         origin: string[] | boolean;
-        methods: Array<'POST' | 'GET' | 'PUT'>
-    }
+        methods: Array<'POST' | 'GET' | 'PUT'>;
+    };
 }

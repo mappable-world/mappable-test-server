@@ -4,6 +4,7 @@ import type {Bounds} from '../../lib/geo';
 import {Pool} from 'pg';
 import {config} from '../../config';
 import {logger} from '../../lib/logger';
+import {statuses} from '../../config/constants';
 
 export class DbDataProvider implements DataProvider {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -13,10 +14,10 @@ export class DbDataProvider implements DataProvider {
     constructor() {
         try {
             this.#db = new Pool(config.db);
-            this.#status = 'ready';
+            this.#status = statuses.ready;
         } catch (e) {
             logger.error(e);
-            this.#status = 'error';
+            this.#status = statuses.error;
         }
     }
     async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
@@ -37,7 +38,7 @@ export class DbDataProvider implements DataProvider {
         };
     }
 
-    #status: STATUSES = 'pending';
+    #status: STATUSES = statuses.pending;
 
     get status(): STATUSES {
         return this.#status;

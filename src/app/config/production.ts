@@ -1,6 +1,6 @@
 import Config from './types';
 import {DEFAULT_JSON_URL} from './constants';
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
 dotenv.config();
 

@@ -7,7 +7,7 @@ import {asyncMiddleware} from './lib/async-middlware';
 import {versionMiddleware} from './middleware/version';
 import {makeDataProvider} from './middleware/data-provider';
 import {config} from './config';
-import {router as v1} from "./v1";
+import {router as v1} from './v1';
 
 export function createApp() {
     return (

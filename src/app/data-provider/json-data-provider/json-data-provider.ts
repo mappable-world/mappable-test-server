@@ -4,13 +4,14 @@ import type {Feature, FeatureCollection, Point} from 'geojson';
 import got from 'got';
 import {config} from '../../config';
 import {logger} from '../../lib/logger';
+import {statuses} from '../../config/constants';
 
 export class JsonDataProvider implements DataProvider {
     #data: Feature<Point>[] = [];
     #isLoading: Promise<void>;
     #jsonUrl: string;
 
-    #status: STATUSES = 'pending';
+    #status: STATUSES = statuses.pending;
     get status(): STATUSES {
         return this.#status;
     }
@@ -42,10 +43,10 @@ export class JsonDataProvider implements DataProvider {
             const content = await got(this.#jsonUrl);
             const data = JSON.parse(content.body) as FeatureCollection<Point>;
             this.#data = data.features as Feature<Point>[];
-            this.#status = 'ready';
+            this.#status = statuses.ready;
         } catch (e) {
             logger.error(e);
-            this.#status = 'error';
+            this.#status = statuses.error;
         }
     }
 
