@@ -1,14 +1,23 @@
-import type {DataProvider, FeaturesAnswer} from '../interface';
+import type {DataProvider, FeaturesAnswer, STATUSES} from '../interface';
 import type {Feature, Point} from 'geojson';
 import type {Bounds} from '../../lib/geo';
 import {Pool} from 'pg';
 import {config} from '../../config';
+import {logger} from '../../lib/logger';
 
 export class DbDataProvider implements DataProvider {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore Ignore try catch
     #db: Pool;
 
     constructor() {
-        this.#db = new Pool(config.db);
+        try {
+            this.#db = new Pool(config.db);
+            this.#status = 'ready';
+        } catch (e) {
+            logger.error(e);
+            this.#status = 'error';
+        }
     }
     async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
         const query = (fields: string) =>
@@ -28,7 +37,9 @@ export class DbDataProvider implements DataProvider {
         };
     }
 
-    async ready(): Promise<void> {
-        await this.#db.query('select now()');
+    #status: STATUSES = 'pending';
+
+    get status(): STATUSES {
+        return this.#status;
     }
 }

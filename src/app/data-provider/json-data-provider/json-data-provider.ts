@@ -1,13 +1,19 @@
-import {DataProvider, type FeaturesAnswer} from '../interface';
+import {DataProvider, type FeaturesAnswer, STATUSES} from '../interface';
 import type {Bounds, LngLat} from '../../lib/geo';
 import type {Feature, FeatureCollection, Point} from 'geojson';
 import got from 'got';
 import {config} from '../../config';
+import {logger} from '../../lib/logger';
 
 export class JsonDataProvider implements DataProvider {
     #data: Feature<Point>[] = [];
     #isLoading: Promise<void>;
     #jsonUrl: string;
+
+    #status: STATUSES = 'pending';
+    get status(): STATUSES {
+        return this.#status;
+    }
 
     constructor() {
         this.#jsonUrl = config.pointsImportUrl;
@@ -32,9 +38,15 @@ export class JsonDataProvider implements DataProvider {
     }
 
     private async __loadData(): Promise<void> {
-        const content = await got(this.#jsonUrl);
-        const data = JSON.parse(content.body) as FeatureCollection<Point>;
-        this.#data = data.features as Feature<Point>[];
+        try {
+            const content = await got(this.#jsonUrl);
+            const data = JSON.parse(content.body) as FeatureCollection<Point>;
+            this.#data = data.features as Feature<Point>[];
+            this.#status = 'ready';
+        } catch (e) {
+            logger.error(e);
+            this.#status = 'error';
+        }
     }
 
     private __isPointInsideBounds(coordinates: LngLat, [[$1, $2], [$3, $4]]: Bounds): boolean {
