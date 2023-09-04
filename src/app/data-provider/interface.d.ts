@@ -4,10 +4,13 @@ import type {Feature, Point} from 'geojson';
 export type STATUSES = 'ready' | 'pending' | 'error';
 
 export interface DataProvider {
+    /**
+     * Get features by bounds
+     */
     getFeaturesByBBox(bounds: Bounds, limits: number, page?: number): Promise<FeaturesAnswer>;
 
     /**
-     * Check if data provider is ready to work
+     * Status of data provider
      */
     readonly status: STATUSES;
 }
