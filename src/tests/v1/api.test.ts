@@ -12,7 +12,8 @@ describe('/v1', () => {
     beforeAll(async () => {
         nock.disableNetConnect();
         nock.enableNetConnect(/(127.0.0.1|localhost|cloudfront.net)/);
-        testServer = await TestServer.start(createApp());
+        const app = await createApp();
+        testServer = await TestServer.start(app);
     });
 
     afterAll(async () => {

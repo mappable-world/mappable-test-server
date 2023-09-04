@@ -3,19 +3,35 @@ import {pingMiddleware} from './middleware/ping';
 import cors from 'cors';
 import * as Boom from '@hapi/boom';
 import {logger} from './lib/logger';
-import {asyncMiddleware} from './lib/async-middlware';
 import {versionMiddleware} from './middleware/version';
-import {makeDataProvider} from './middleware/data-provider';
 import {config} from './config';
 import {router as v1} from './v1';
+import {DbDataProvider} from './data-provider/db-data-provider/db-data-provider';
+import {JsonDataProvider} from './data-provider/json-data-provider/json-data-provider';
+import {DataProvider} from './data-provider/interface';
 
-export function createApp() {
+declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
+    namespace Express {
+        interface Request {
+            dataProvider: DataProvider;
+        }
+    }
+}
+
+export async function createApp() {
+    const dataProvider =
+        config.defaultProvider === 'db' ? await DbDataProvider.create() : await JsonDataProvider.create();
+
     return (
         express()
             .disable('x-powered-by')
             .disable('etag')
+            .use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+                req.dataProvider = dataProvider;
+                next();
+            })
             .use(express.json())
-            .use(asyncMiddleware(makeDataProvider))
             .get('/version', versionMiddleware)
             .get('/ping', pingMiddleware)
             .use(cors(config.cors))

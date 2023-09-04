@@ -1,8 +1,8 @@
 import Config from './types';
-import testing from './testing';
+import production from "./production";
 
 const development: Config = {
-    ...testing
+    ...production
 };
 
 export default development;

@@ -1,8 +1,8 @@
 import type Config from './types';
-import production from './production';
+import development from './development';
 
 const testing: Config = {
-    ...production,
+    ...development,
     defaultProvider: 'json'
 };
 
