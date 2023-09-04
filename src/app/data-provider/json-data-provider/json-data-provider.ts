@@ -34,10 +34,6 @@ export class JsonDataProvider implements DataProvider {
         });
     }
 
-    ready(): Promise<void> {
-        return this.#isLoading;
-    }
-
     private async __loadData(): Promise<void> {
         try {
             const content = await got(this.#jsonUrl);
