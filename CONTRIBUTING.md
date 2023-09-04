@@ -24,9 +24,16 @@ DB_USER=postgres
 DB_PASSWORD=secret007
 PGADMIN_DEFAULT_EMAIL=postgres@admin.com
 PGADMIN_DEFAULT_PASSWORD=qwertyuiop
+PORT=8080
+HOST=0.0.0.0
+DISABLE_LOGGING=false
+POINTS_JSON="https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_admin_1_label_points.geojson"
+ORIGINS="http://localhost:3000"
 ```
 
+-   `DISABLE_LOGGING` - disable logging
 -   `DATA_PROVIDER` can be `db` or `json`
+-   `POINTS_JSON` - link to the geojson file with points for json data provider
 -   `DB_PASSWORD` and `DB_USER` make your own, they will be used both when initializing the database and when connecting to it
 -   `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD` Needed to connect to [pgAdmin](https://www.pgadmin.org/), you don't have to set them if you don't use this service
 

@@ -9,6 +9,9 @@ export default interface Config {
         password: string;
         port: number;
     };
+    logger: {
+        disableLogging: boolean;
+    };
     pointsImportUrl: string;
     cors: {
         origin: string[] | boolean;

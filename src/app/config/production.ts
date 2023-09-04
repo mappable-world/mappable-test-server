@@ -15,10 +15,13 @@ const production: Config = {
         password: process.env.DB_PASSWORD ?? '',
         port: Number(process.env.DB_PORT ?? 5432)
     },
+    logger: {
+        disableLogging: process.env.DISABLE_LOGGING === 'true'
+    },
     pointsImportUrl: process.env.POINTS_JSON ?? DEFAULT_JSON_URL,
     cors: {
         origin: process.env.ORIGINS ? process.env.ORIGINS.split(' ') : true,
-        methods: ['POST']
+        methods: ['POST', 'GET']
     }
 };
 
