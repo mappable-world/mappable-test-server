@@ -23,6 +23,7 @@
   "author": "Mappable authors",
   "license": "Apache-2",
   "dependencies": {
+    "got": "9.3.2",
     "@hapi/boom": "^10.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -48,7 +49,6 @@
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",
     "eslint": "^8.47.0",
-    "got": "9.3.2",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.2",
     "ts-jest": "^29.1.1",

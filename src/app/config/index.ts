@@ -13,7 +13,6 @@ const configs = new Map<typeof ENVIRONMENT | undefined, Readonly<Config>>([
 
 const configForEnv = configs.get(ENVIRONMENT);
 assert(configForEnv, `There is no configuration for environment "${ENVIRONMENT}"`);
-
 const config = configForEnv!;
 
 export {config, Config, ENVIRONMENT};
