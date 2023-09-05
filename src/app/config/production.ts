@@ -15,9 +15,12 @@ const production: Config = {
         database: process.env.DB_NAME ?? '',
         password: process.env.DB_PASSWORD ?? '',
         port: Number(process.env.DB_PORT ?? 5432),
-        ssl: {
-            rejectUnauthorized: false
-        }
+        ssl:
+            process.env.DB_SSL === 'true'
+                ? {
+                      rejectUnauthorized: false
+                  }
+                : undefined
     },
     logger: {
         disableLogging: process.env.DISABLE_LOGGING === 'true'
