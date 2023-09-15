@@ -110,6 +110,45 @@ paths:
                 400:
                     $ref: '#/components/responses/BadRequest'
 
+    /v1/tile-clusterer:
+      get:
+        summary: |
+            Returns geo features whose coordinates are within a rectangle that is uniquely defined by its x,y and z tile coordinates
+            But reduce all points to one point with count of points in cluster
+
+        parameters:
+          - in: query
+            name: x
+            schema:
+              type: integer
+            required: true
+            example: 10
+
+          - in: query
+            name: y
+            schema:
+              type: integer
+            required: true
+            example: 20
+
+          - in: query
+            name: z
+            schema:
+              type: integer
+            required: true
+            example: 5
+
+        responses:
+          200:
+            description: Features list.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/FeaturesWithBounds'
+
+          400:
+            $ref: '#/components/responses/BadRequest'
+
     /version:
         get:
             description: Application Version

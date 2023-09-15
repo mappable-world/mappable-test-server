@@ -121,5 +121,30 @@ describe('/v1', () => {
                 });
             });
         });
+
+        describe('Check tile clusterer', () => {
+            it('should return 1 point inside tile', async () => {
+                const res = await testServer.request('/v1/tile-clusterer?x=10&y=11&z=5', {
+                    json: true
+                });
+                expect(res.statusCode).toEqual(200);
+
+                const result = res.body as {features: Feature<Point>[]; bounds: Bounds; minMax: Bounds};
+                expect(result.features.length).toEqual(1);
+                expect(result.bounds).toEqual([
+                    [-67.5, 48.92249926375823],
+                    [-56.25, 40.97989806962013]
+                ]);
+
+                expect(result.minMax).toEqual([
+                    [-67.30010370199994, 47.960976981000044],
+                    [-56.3153175459999, 43.45754888200008]
+                ]);
+
+                expect(result.features[0].geometry.coordinates).toEqual([
+                    -61.807710623999924, 45.709262931500064
+                ]);
+            });
+        });
     });
 });
