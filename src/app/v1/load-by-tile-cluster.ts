@@ -45,7 +45,6 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
         },
         {leftBottom: [Infinity, -Infinity], rightTop: [-Infinity, Infinity]}
     );
-    console.log(leftBottom, rightTop, result);
 
     res.send({
         features: [
