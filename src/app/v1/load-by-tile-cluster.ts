@@ -24,6 +24,17 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
 
     const coordinates: Bounds = tileToWorld(tx, ty, tz).map(fromWorldCoordinates) as Bounds;
     const result = await req.dataProvider.getFeaturesByBBox(coordinates, limit);
+
+    if (!result.features.length) {
+        res.send({
+            features: [],
+            total: 0,
+            minMax: coordinates,
+            bounds: coordinates
+        });
+        return;
+    }
+
     const {leftBottom, rightTop} = result.features.reduce(
         (mm, point) => {
             const [lng, lat] = point.geometry.coordinates;
@@ -34,6 +45,7 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
         },
         {leftBottom: [Infinity, -Infinity], rightTop: [-Infinity, Infinity]}
     );
+    console.log(leftBottom, rightTop, result);
 
     res.send({
         features: [
