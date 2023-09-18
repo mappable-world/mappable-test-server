@@ -22,7 +22,12 @@ export class JsonDataProvider implements DataProvider {
 
         return Promise.resolve({
             total: totalResult.length,
-            features: totalResult.slice((page - 1) * limit, (page - 1) * limit + limit)
+            features: totalResult.slice((page - 1) * limit, (page - 1) * limit + limit).map((f, index) => {
+                return {
+                    id: `${f.properties?.OBJECTID_1 ?? index}`,
+                    ...f
+                };
+            })
         });
     }
 
@@ -42,7 +47,7 @@ export class JsonDataProvider implements DataProvider {
     }
 
     static async create(): Promise<DataProvider> {
-        const  provider = new JsonDataProvider();
+        const provider = new JsonDataProvider();
         await provider.#isLoading;
         return provider;
     }

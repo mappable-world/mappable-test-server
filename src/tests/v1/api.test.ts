@@ -78,6 +78,7 @@ describe('/v1', () => {
                     const result = res.body as {features: Feature<Point>[]; bounds: Bounds};
                     expect(result.features.length).toEqual(102);
                     expect(result.features[0].geometry.coordinates).toEqual([53.796540969000034, 24.189215755000077]);
+                    expect(result.features[0].id).toEqual('1');
 
                     const res2 = await req(2);
                     expect(res2.statusCode).toEqual(200);
@@ -147,6 +148,7 @@ describe('/v1', () => {
                 ]);
 
                 expect(result.features[0].geometry.coordinates).toEqual([-61.807710623999924, 45.709262931500064]);
+                expect(result.features[0].id).toEqual('cluster-10-11-5');
             });
         });
     });

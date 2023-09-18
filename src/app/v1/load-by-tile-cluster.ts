@@ -49,6 +49,7 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
     res.send({
         features: [
             {
+                id: `cluster-${tx}-${ty}-${tz}`,
                 type: 'Feature',
                 geometry: {
                     type: 'Point',

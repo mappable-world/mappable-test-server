@@ -22,7 +22,7 @@ export class DbDataProvider implements DataProvider {
 
         const [total] = (await this.#db.query(query('count(uid) as cnt'), bounds.flat())).rows;
 
-        const points = await this.#db.query(`${query('feature')} limit $5 offset $6`, [
+        const points = await this.#db.query(`${query('uid, feature')} limit $5 offset $6`, [
             ...bounds.flat(),
             limit,
             limit * (page - 1)
@@ -30,7 +30,10 @@ export class DbDataProvider implements DataProvider {
 
         return {
             total: total.cnt,
-            features: (points.rows as Array<{feature: Feature<Point>}>).map((row) => row.feature)
+            features: (points.rows as Array<{feature: Feature<Point>; uid: string}>).map((row) => ({
+                id: row.uid,
+                ...row.feature
+            }))
         };
     }
 
