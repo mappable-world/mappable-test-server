@@ -60,6 +60,9 @@ describe('/v1', () => {
 
                 const result = res.body as {features: Feature<Point>[]};
                 expect(result.features.length).toEqual(102);
+
+                expect(result.features[0].geometry.type).toEqual('Point');
+                expect(result.features[0].geometry.coordinates).toEqual([53.796540969000034, 24.189215755000077]);
             });
 
             describe('Check pagination', () => {
@@ -104,8 +107,10 @@ describe('/v1', () => {
                 });
                 expect(res.statusCode).toEqual(200);
 
-                const result = res.body as {features: Feature[]; bounds: Bounds};
+                const result = res.body as {features: Feature<Point>[]; bounds: Bounds};
                 expect(result.features.length).toEqual(21);
+                expect(result.features[0].geometry.type).toEqual('Point');
+                expect(result.features[0].geometry.coordinates).toEqual([-62.54479907699994, 45.81303025200003]);
                 expect(result.bounds).toEqual([
                     [-67.5, 48.92249926375823],
                     [-56.25, 40.97989806962013]
@@ -141,9 +146,7 @@ describe('/v1', () => {
                     [-56.3153175459999, 43.45754888200008]
                 ]);
 
-                expect(result.features[0].geometry.coordinates).toEqual([
-                    -61.807710623999924, 45.709262931500064
-                ]);
+                expect(result.features[0].geometry.coordinates).toEqual([-61.807710623999924, 45.709262931500064]);
             });
         });
     });

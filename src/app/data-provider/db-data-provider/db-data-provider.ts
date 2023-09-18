@@ -30,7 +30,7 @@ export class DbDataProvider implements DataProvider {
 
         return {
             total: total.cnt,
-            features: points.rows as Feature<Point>[]
+            features: (points.rows as Array<{feature: Feature<Point>}>).map((row) => row.feature)
         };
     }
 
