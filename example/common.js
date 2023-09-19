@@ -22,6 +22,8 @@ const TEST_TILE_SERVER = 'https://mappable-test-server-d7778c5d7460.herokuapp.co
 const MODE = ['tile-clusterer', 'tile', 'bbox'].includes(SEARCH_PARAMS.get('mode'))
     ? SEARCH_PARAMS.get('mode')
     : 'tile';
+const SHOW_MODE_SWITCHER = SEARCH_PARAMS.get('hideModeSwitcher') !== 'true';
+
 
 const markerElement = document.createElement('div');
 markerElement.classList.add('circle');
