@@ -25,7 +25,6 @@ const MODE = ['tile-clusterer', 'tile', 'bbox'].includes(SEARCH_PARAMS.get('mode
 const SHOW_MODE_SWITCHER = SEARCH_PARAMS.get('hideModeSwitcher') !== 'true';
 const SHOW_CELLS = SEARCH_PARAMS.get('showCells') === 'true';
 
-
 const markerElement = document.createElement('div');
 markerElement.classList.add('circle');
 markerElement.innerHTML =
@@ -49,7 +48,12 @@ function makeEntity(map, feature) {
             coordinates: feature.geometry.coordinates,
             onDoubleClick: (e) => {
                 if (feature.properties.minMax) {
-                    map.setLocation({bounds: feature.properties.minMax, duration: 400});
+                    if (SHOW_CELLS) {
+                        showBounds(feature.properties.minMax);
+                    }
+                    setTimeout(() => {
+                        map.setLocation({bounds: feature.properties.minMaxx, duration: 400});
+                    }, 300);
                 }
             }
         },
@@ -82,6 +86,10 @@ async function fetchTile({tx, ty, tz, signal}) {
         }).then((resp) => resp.json());
         signal.throwIfAborted();
 
+        if (SHOW_CELLS) {
+            showBounds(data.bounds);
+        }
+
         features = [...data.features];
 
         cache.set(key, features);
@@ -110,9 +118,12 @@ async function fetchBound([[lng1, lat1], [lng2, lat2]]) {
     controller = new AbortController();
     const signal = controller.signal;
 
-    const data = await fetch(`${TEST_TILE_SERVER}/v1/${MODE}?lng1=${lng1}&lat1=${lat1}&lng2=${lng2}&lat2=${lat2}&limit=10000`, {
-        signal
-    }).then((resp) => resp.json());
+    const data = await fetch(
+        `${TEST_TILE_SERVER}/v1/${MODE}?lng1=${lng1}&lat1=${lat1}&lng2=${lng2}&lat2=${lat2}&limit=10000`,
+        {
+            signal
+        }
+    ).then((resp) => resp.json());
 
     const features = [...data.features];
     controller = null;
@@ -122,17 +133,35 @@ async function fetchBound([[lng1, lat1], [lng2, lat2]]) {
     return features;
 }
 
-const layerId = "A";
+const layerId = 'A';
 const dataSource = {
     type: layerId,
     fetchTile: (x, y, z) => {
-        const canvas = document.createElement("canvas");
+        const canvas = document.createElement('canvas');
         canvas.width = TILE_SIZE;
         canvas.height = TILE_SIZE;
-        const ctx = canvas.getContext("2d");
-        ctx.strokeStyle = "#010101";
+        const ctx = canvas.getContext('2d');
+        ctx.strokeStyle = '#010101';
         ctx.strokeRect(0, 0, TILE_SIZE, TILE_SIZE);
         ctx.fillText(`${x}-${y}-${z}`, 10, 15);
-        return Promise.resolve({ image: canvas });
+        return Promise.resolve({image: canvas});
     }
+};
+
+function showBounds(bounds) {
+    const entity = new mappable.MMapFeature({
+        id: 'bounds' + bounds.toString(),
+        geometry: {
+            type: 'Polygon',
+            coordinates: [[bounds[0], [bounds[0][0], bounds[1][1]], bounds[1], [bounds[1][0], bounds[0][1]]]]
+        },
+        style: {
+            fill: 'rgba(56, 56, 219, 0.5)',
+            stroke: [{color: '#e07e7e', width: 2}]
+        }
+    });
+    map.addChild(entity);
+    setTimeout(() => {
+        map.removeChild(entity);
+    }, 1000);
 }

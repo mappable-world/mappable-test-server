@@ -18,7 +18,7 @@ export class DbDataProvider implements DataProvider {
     }
     async getFeaturesByBBox(bounds: Bounds, limit: number, page: number = 1): Promise<FeaturesAnswer> {
         const query = (fields: string) =>
-            `select ${fields} from points where coordinates && ST_MakeEnvelope($1, $2, $3, $4)`;
+            `select ${fields} from points where ST_Intersects(coordinates, ST_MakeEnvelope($1, $4, $3, $2, 4326))`;
 
         const [total] = (await this.#db.query(query('count(uid) as cnt'), bounds.flat())).rows;
 
