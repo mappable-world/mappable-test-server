@@ -1,8 +1,9 @@
 # Test Server for Serving Data by Tiles and Bbox
 
+- [GitHub](https://github.com/mappable-world/mappable-test-server)
 - [API & Demo](https://mappable-test-server-d7778c5d7460.herokuapp.com/v1/api_docs/)
-- [Contributing](./CONTRIBUTING.md)
-- [License](./LICENSE)
+- [Contributing](https://github.com/mappable-world/mappable-test-server/blob/main/CONTRIBUTING.md)
+- [License](https://github.com/mappable-world/mappable-test-server/blob/main/LICENSE)
 
 The purpose of the project is to create a test server that shows how data can be
 loaded by tiles and bbox (lower left and upper right points).
