@@ -34,6 +34,7 @@ function makeEntity(map, feature) {
     if (feature.properties.count > 1) {
         elm.classList.remove('circle');
         elm.classList.add('cluster');
+        elm.style.setProperty('--radius', Math.max(feature.properties.count.toString().length * 20, 40) + 'px');
         elm.innerHTML = `<div class="cluster-content"><span class="cluster-text">${feature.properties.count}</span></div>`;
     }
 
