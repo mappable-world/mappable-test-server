@@ -23,6 +23,7 @@ const MODE = ['tile-clusterer', 'tile', 'bbox'].includes(SEARCH_PARAMS.get('mode
     ? SEARCH_PARAMS.get('mode')
     : 'tile';
 const SHOW_MODE_SWITCHER = SEARCH_PARAMS.get('hideModeSwitcher') !== 'true';
+const SHOW_CELLS = SEARCH_PARAMS.get('showCells') === 'true';
 
 
 const markerElement = document.createElement('div');
