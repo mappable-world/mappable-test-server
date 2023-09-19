@@ -59,7 +59,7 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
                     ]
                 },
                 properties: {
-                    count: result.total
+                    count: +result.total
                 }
             }
         ],

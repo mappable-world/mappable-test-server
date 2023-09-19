@@ -147,6 +147,7 @@ describe('/v1', () => {
                     [-56.3153175459999, 43.45754888200008]
                 ]);
 
+                expect(result.features[0].properties?.count).toEqual(21);
                 expect(result.features[0].geometry.coordinates).toEqual([-61.807710623999924, 45.709262931500064]);
                 expect(result.features[0].id).toEqual('cluster-10-11-5');
             });
