@@ -30,5 +30,5 @@ export async function loadByBBox(req: Request, res: Response): Promise<void> {
         page
     );
 
-    res.send({features: result.features, total: result.total});
+    res.send({features: result.features, total: +result.total});
 }

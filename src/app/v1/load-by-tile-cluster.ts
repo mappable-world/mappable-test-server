@@ -29,7 +29,6 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
         res.send({
             features: result.features,
             total: result.features.length,
-            minMax: bounds,
             bounds: bounds
         });
         return;
@@ -59,13 +58,13 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
                     ]
                 },
                 properties: {
-                    count: +result.total
+                    count: +result.total,
+                    minMax: [leftBottom, rightTop]
                 }
             }
         ],
 
         total: result.total,
-        minMax: [leftBottom, rightTop],
         bounds: bounds
     });
 }
