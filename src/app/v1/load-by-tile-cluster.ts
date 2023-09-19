@@ -22,15 +22,15 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
 
     const {x: tx, y: ty, z: tz, limit} = validationResult.data;
 
-    const coordinates: Bounds = tileToWorld(tx, ty, tz).map(fromWorldCoordinates) as Bounds;
-    const result = await req.dataProvider.getFeaturesByBBox(coordinates, limit);
+    const bounds: Bounds = tileToWorld(tx, ty, tz).map(fromWorldCoordinates) as Bounds;
+    const result = await req.dataProvider.getFeaturesByBBox(bounds, limit);
 
-    if (!result.features.length) {
+    if (result.features.length < 2) {
         res.send({
-            features: [],
-            total: 0,
-            minMax: coordinates,
-            bounds: coordinates
+            features: result.features,
+            total: result.features.length,
+            minMax: bounds,
+            bounds: bounds
         });
         return;
     }
@@ -66,6 +66,6 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
 
         total: result.total,
         minMax: [leftBottom, rightTop],
-        bounds: coordinates
+        bounds: bounds
     });
 }
