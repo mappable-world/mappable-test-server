@@ -12,6 +12,7 @@ body,
 .content {
     width: 1024px;
     margin: 0 auto;
+    padding-bottom: 30px;
 }
 
 .version {
