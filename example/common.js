@@ -15,7 +15,7 @@ const BOUNDS = [
     [53.20890963521473, 25.52765018907181],
     [57.444403818421854, 24.71096299361919]
 ];
-const ZOOM_RANGE = {min: 4, max: 10};
+const ZOOM_RANGE = {min: 4, max: 19};
 const LOCATION = {bounds: BOUNDS};
 const TILE_SIZE = 256;
 const TEST_TILE_SERVER = 'https://mappable-test-server-d7778c5d7460.herokuapp.com';
@@ -46,9 +46,9 @@ function makeEntity(map, feature) {
         {
             id: feature.id,
             coordinates: feature.geometry.coordinates,
-            onDoubleClick: () => {
-                if (feature.properties.minMax > 1) {
-                    map.setLocation(feature.properties.minMax);
+            onDoubleClick: (e) => {
+                if (feature.properties.minMax) {
+                    map.setLocation({bounds: feature.properties.minMax, duration: 400});
                 }
             }
         },
@@ -109,7 +109,7 @@ async function fetchBound([[lng1, lat1], [lng2, lat2]]) {
     controller = new AbortController();
     const signal = controller.signal;
 
-    const data = await fetch(`${TEST_TILE_SERVER}/v1/${MODE}?lng1=${lng1}&lat1=${lat1}&lng2=${lng2}&lat2=${lat2}`, {
+    const data = await fetch(`${TEST_TILE_SERVER}/v1/${MODE}?lng1=${lng1}&lat1=${lat1}&lng2=${lng2}&lat2=${lat2}&limit=10000`, {
         signal
     }).then((resp) => resp.json());
 
@@ -119,4 +119,19 @@ async function fetchBound([[lng1, lat1], [lng2, lat2]]) {
     cache.set(key, features);
 
     return features;
+}
+
+const layerId = "A";
+const dataSource = {
+    type: layerId,
+    fetchTile: (x, y, z) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = TILE_SIZE;
+        canvas.height = TILE_SIZE;
+        const ctx = canvas.getContext("2d");
+        ctx.strokeStyle = "#010101";
+        ctx.strokeRect(0, 0, TILE_SIZE, TILE_SIZE);
+        ctx.fillText(`${x}-${y}-${z}`, 10, 15);
+        return Promise.resolve({ image: canvas });
+    }
 }

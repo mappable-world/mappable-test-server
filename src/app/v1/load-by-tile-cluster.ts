@@ -7,7 +7,7 @@ import {fromWorldCoordinates, tileToWorld} from '../lib/projection/projection';
 
 const getTileRequestSchema = z
     .object({
-        limit: numericString(z.number().int().min(100).max(10000).default(1000)),
+        limit: numericString(z.number().int().min(100).max(10000).default(10000)),
         x: numericString(z.number().int()),
         y: numericString(z.number().int()),
         z: numericString(z.number().int())
@@ -28,7 +28,7 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
     if (result.features.length < 2) {
         res.send({
             features: result.features,
-            total: result.features.length,
+            total: result.total,
             bounds: bounds
         });
         return;

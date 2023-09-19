@@ -30,16 +30,35 @@
                     MMapListener,
                     MMapControls,
                     MMapCollection,
-                    MMapMarker
+                    MMapTileDataSource,
+                    MMapLayer
                 } = mappable;
 
                 const {MMapZoomControl} = await mappable.import('@mappable-world/mappable-controls@0.0.1');
                 const {MMapEntityTileLoader} = await mappable.import('@mappable-world/mappable-entity-tile-loader');
 
-                map = new MMap(document.getElementById('app'), {location: LOCATION, zoomRange: ZOOM_RANGE});
+                map = new MMap(document.getElementById('app'), {
+                    location: LOCATION,
+                    behaviors: [
+                        'drag',
+                        'pinchZoom',
+                        'scrollZoom',
+                        'magnifier',
+                        'oneFingerZoom',
+                        'mouseRotate',
+                        'mouseTilt',
+                        'pinchRotate',
+                        'panTilt'
+                    ],
+                    zoomRange: ZOOM_RANGE
+                });
                 map.addChild(new MMapDefaultSchemeLayer());
                 map.addChild(new MMapDefaultFeaturesLayer());
                 map.addChild(new MMapControls({position: 'right'}).addChild(new MMapZoomControl({})));
+
+                map.addChild(new MMapTileDataSource({id: layerId, raster: dataSource})).addChild(
+                    new MMapLayer({id: layerId, source: layerId, type: layerId})
+                );
 
                 if (MODE !== 'bbox') {
                     map.addChild(
@@ -112,9 +131,11 @@
     <body>
         <div class="toolbar">
             <div class="btn-group">
-                <a href="?mode=tile" class="btn btn-primary btn-tile">Tile</a>
-                <a href="?mode=tile-clusterer" class="btn btn-primary btn-tile-clusterer">Tile with Clusterer</a>
-                <a href="?mode=bbox" class="btn btn-primary btn-bbox">BBox</a>
+                <a href="?mode=tile" class="btn btn-secondary btn-sm btn-tile">Tile</a>
+                <a href="?mode=tile-clusterer" class="btn btn-secondary btn-sm btn-tile-clusterer"
+                    >Tile with Clusterer</a
+                >
+                <a href="?mode=bbox" class="btn btn-secondary btn-sm btn-bbox">BBox</a>
             </div>
         </div>
         <script>
