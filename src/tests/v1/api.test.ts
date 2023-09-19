@@ -142,7 +142,7 @@ describe('/v1', () => {
                     [-56.25, 40.97989806962013]
                 ]);
 
-                expect(result.minMax).toEqual([
+                expect(result.features[0].properties?.minMax).toEqual([
                     [-67.30010370199994, 47.960976981000044],
                     [-56.3153175459999, 43.45754888200008]
                 ]);
