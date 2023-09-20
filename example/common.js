@@ -11,12 +11,14 @@ mappable.import.loaders.unshift(async (pkg) => {
 
 const SEARCH_PARAMS = new URLSearchParams(window.location.search);
 
-const BOUNDS = [
-    [53.20890963521473, 25.52765018907181],
-    [57.444403818421854, 24.71096299361919]
-];
+const FIXED_POINT = [55.8994004655942, 25.334356212181216];
+
+const LOCATION = {
+    center: SEARCH_PARAMS.get('center') ? SEARCH_PARAMS.get('center').split(',').map(Number) : FIXED_POINT,
+    zoom: SEARCH_PARAMS.get('zoom') ? +SEARCH_PARAMS.get('zoom') : 8
+};
+
 const ZOOM_RANGE = {min: 4, max: 19};
-const LOCATION = {bounds: BOUNDS};
 const TILE_SIZE = 256;
 const TEST_TILE_SERVER = 'https://mappable-test-server-d7778c5d7460.herokuapp.com';
 const MODE = ['tile-clusterer', 'tile', 'bbox'].includes(SEARCH_PARAMS.get('mode'))

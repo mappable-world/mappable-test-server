@@ -118,6 +118,13 @@ paths:
 
         parameters:
           - in: query
+            name: minCount
+            description: Minimal count of points after that points will be clustered
+            schema:
+              type: integer
+            example: 3
+
+          - in: query
             name: x
             schema:
               type: integer
