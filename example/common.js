@@ -54,7 +54,7 @@ function makeEntity(map, feature) {
                         showBounds(feature.properties.minMax);
                     }
                     setTimeout(() => {
-                        map.setLocation({bounds: feature.properties.minMaxx, duration: 400});
+                        map.setLocation({bounds: feature.properties.minMax, duration: 400});
                     }, 300);
                 }
             }
