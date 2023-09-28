@@ -35,15 +35,18 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
         return;
     }
 
-    const {leftBottom, rightTop} = result.features.reduce(
+    const {leftBottom, rightTop, sumLng, sumLat} = result.features.reduce(
         (mm, point) => {
             const [lng, lat] = point.geometry.coordinates;
+
             return {
+                sumLng: mm.sumLng + lng,
+                sumLat: mm.sumLat + lat,
                 leftBottom: [Math.min(mm.leftBottom[0], lng), Math.max(mm.leftBottom[1], lat)],
                 rightTop: [Math.max(mm.rightTop[0], lng), Math.min(mm.rightTop[1], lat)]
             };
         },
-        {leftBottom: [Infinity, -Infinity], rightTop: [-Infinity, Infinity]}
+        {leftBottom: [Infinity, -Infinity], rightTop: [-Infinity, Infinity], sumLng: 0, sumLat: 0}
     );
 
     res.send({
@@ -53,10 +56,7 @@ export async function loadByTileClusterer(req: Request, res: Response): Promise<
                 type: 'Feature',
                 geometry: {
                     type: 'Point',
-                    coordinates: [
-                        (leftBottom[0] + rightTop[0]) / 2,
-                        (leftBottom[1] + rightTop[1]) / 2
-                    ]
+                    coordinates: [sumLng / result.features.length, sumLat / result.features.length]
                 },
                 properties: {
                     count: +result.total,
