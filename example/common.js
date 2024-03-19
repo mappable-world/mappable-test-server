@@ -143,12 +143,13 @@ const dataSource = {
     type: layerId,
     fetchTile: (x, y, z) => {
         const canvas = document.createElement('canvas');
-        canvas.width = TILE_SIZE;
-        canvas.height = TILE_SIZE;
+        canvas.width = TILE_SIZE * window.devicePixelRatio;
+        canvas.height = TILE_SIZE * window.devicePixelRatio;
         const ctx = canvas.getContext('2d');
         ctx.strokeStyle = '#010101';
-        ctx.strokeRect(0, 0, TILE_SIZE, TILE_SIZE);
-        ctx.fillText(`${x}-${y}-${z}`, 10, 15);
+        ctx.font = '26px sans-serif';
+        ctx.strokeRect(0, 0, TILE_SIZE * window.devicePixelRatio, TILE_SIZE * window.devicePixelRatio);
+        ctx.fillText(`${x}-${y}-${z}`, 10, 30);
         return Promise.resolve({image: canvas});
     }
 };
@@ -161,7 +162,8 @@ function showBounds(bounds) {
             coordinates: [[bounds[0], [bounds[0][0], bounds[1][1]], bounds[1], [bounds[1][0], bounds[0][1]]]]
         },
         style: {
-            fill: 'rgba(56, 56, 219, 0.5)',
+            fill: '#EEFD7D',
+            fillOpacity: 0.5,
             stroke: [{color: '#e07e7e', width: 2}]
         }
     });
