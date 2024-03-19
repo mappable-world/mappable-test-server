@@ -27,6 +27,8 @@ const MODE = ['tile-clusterer', 'tile', 'bbox'].includes(SEARCH_PARAMS.get('mode
 const SHOW_MODE_SWITCHER = SEARCH_PARAMS.get('hideModeSwitcher') !== 'true';
 const SHOW_CELLS = SEARCH_PARAMS.get('showCells') === 'true';
 const DEBOUNCE = SEARCH_PARAMS.get('debounce') === 'true';
+const DELAY = SEARCH_PARAMS.get('delay') ? +SEARCH_PARAMS.get('delay') : 1000;
+const SHOW_DELAY = SEARCH_PARAMS.get('showDelay') === 'true';
 
 const markerElement = document.createElement('div');
 markerElement.classList.add('circle');
@@ -172,4 +174,108 @@ function showBounds(bounds) {
     setTimeout(() => {
         map.removeChild(entity);
     }, 1000);
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return  () => {
+        const args = arguments;
+        const later = function () {
+            timeout = null;
+            func.apply(null, args);
+        };
+        const callNow = !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(null, args);
+    };
+}
+
+function throttle(func, ms) {
+    let isThrottled = false;
+    let savedArgs = null;
+
+    function wrapper() {
+        if (isThrottled) {
+            savedArgs = arguments;
+            return;
+        }
+
+        func.apply(null, arguments);
+
+        isThrottled = true;
+
+        setTimeout(function () {
+            isThrottled = false;
+            if (savedArgs) {
+                wrapper.apply(null, savedArgs);
+                savedArgs = null;
+            }
+        }, ms);
+    }
+
+    return wrapper;
+}
+
+function delayWrapper(wrapper, fn, delay, getBox) {
+    const setBoxTime = (v) => {
+        const box = getBox();
+        if (!box) {
+            return;
+        }
+        let sec = (v / 1000);
+        if (1 - sec <= 0.005) {
+            sec = 1;
+        }
+        box.textContent = `${sec.toFixed(3)}\u00A0sec`;
+    };
+
+    let startTime = performance.now();
+    let startDelay = delay;
+    setBoxTime(startDelay);
+    let rafStarted = false;
+
+    function loop() {
+        rafStarted = false;
+        const restTime = startDelay - (performance.now() - startTime);
+        setBoxTime(restTime);
+        if (restTime > 0) {
+            rafStarted = true;
+            requestAnimationFrame(loop);
+        } else {
+            setBoxTime(0);
+        }
+    }
+
+    requestAnimationFrame(loop);
+
+    const startTimer = () => {
+        startTime = performance.now();
+        startDelay = delay;
+
+        if (!rafStarted) {
+            rafStarted = true;
+            requestAnimationFrame(loop);
+        }
+    };
+
+    const delayed = wrapper(
+        (...args) => {
+            try {
+                fn(...args);
+            } finally {
+                if (!DEBOUNCE) {
+                    startTimer();
+                }
+            }
+        },
+        delay
+    );
+
+    return (...args) => {
+        delayed(...args);
+        if (DEBOUNCE) {
+            startTimer();
+        }
+    };
 }

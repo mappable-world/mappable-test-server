@@ -24,6 +24,7 @@ body,
     z-index: 1112;
     top: 10px;
     left: 10px;
+    display: flex;
 }
 
 .version {
@@ -77,4 +78,16 @@ body,
     font-size: 0.9em;
 
     color: #fff;
+}
+
+.debounce-board {
+    top: 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    background-color: #EEFD7D;
+    min-width: 80px;
+    justify-content: center;
+    height: 36px;
+    margin-right: 10px;
 }

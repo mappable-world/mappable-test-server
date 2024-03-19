@@ -14,7 +14,6 @@
         <script>
             window.module = {exports: {}};
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/lodash.throttle@4.1.1/index.min.js"></script>
         <script src="common.js"></script>
         <script>
             window.map = null;
@@ -122,9 +121,8 @@
                         }
                     };
 
-                    const throttle = module.exports;
                     const listener = new MMapListener({
-                        onUpdate: throttle(loadFeatures, 300)
+                        onUpdate: delayWrapper(DEBOUNCE ? debounce : throttle, loadFeatures, DELAY, () => document.querySelector('.debounce-board'))
                     });
 
                     map.addChild(listener);
@@ -138,6 +136,8 @@
     </head>
     <body>
         <div class="toolbar">
+            <div class="debounce-board">0.000&nbsp;sec</div>
+
             <div class="btn-group">
                 <a href="?mode=tile" class="btn btn-secondary btn-sm btn-tile">Tile</a>
                 <a href="?mode=tile-clusterer" class="btn btn-secondary btn-sm btn-tile-clusterer"
@@ -153,7 +153,8 @@
                 btn.setAttribute('aria-current', 'page');
             }
 
-            document.querySelector('.toolbar').style.display = SHOW_MODE_SWITCHER ? 'block' : 'none';
+            document.querySelector('.debounce-board').style.display = SHOW_DELAY ? 'flex' : 'none';
+            document.querySelector('.toolbar .btn-group').style.display = SHOW_MODE_SWITCHER ? 'block' : 'none';
         </script>
         <div id="app"></div>
     </body>
