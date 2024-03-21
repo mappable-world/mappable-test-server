@@ -165,7 +165,7 @@ function showBounds(bounds) {
             coordinates: [[bounds[0], [bounds[0][0], bounds[1][1]], bounds[1], [bounds[1][0], bounds[0][1]]]]
         },
         style: {
-            fill: '#EEFD7D',
+            fill: '#CCC',
             fillOpacity: 0.5,
             stroke: [{color: '#e07e7e', width: 2}]
         }
